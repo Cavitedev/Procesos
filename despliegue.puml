@@ -1,0 +1,17 @@
+@startuml Test Diagram
+Node Web{
+    component webApp
+
+}
+Node RestApi{
+component api as "API REST"
+agent logica
+component datos
+
+api .down. logica
+logica .down. datos
+}
+database BBDD
+
+Web -- RestApi
+BBDD -up- RestApi

@@ -1,0 +1,17 @@
+@startuml Modelo de clases
+class Juego
+class Partida{
+    codigo
+}
+class Usuario{
+    nickname
+}
+class Turno{
+
+}
+
+Juego --> "1..* usuarios" Usuario
+Juego -->"0..* +partidas" Partida
+Partida -right->"2" Usuario
+Partida --> Turno
+Turno -->"1" Usuario
