@@ -17,7 +17,7 @@ function Juego() {
     //Asignar propietario a nick
     //Devolver partida
     let codigo = Date.now();
-    this.partidas[codigo] = new Partida();
+    this.partidas[codigo] = new Partida(codigo, nick);
     return codigo;
   };
 }
@@ -31,8 +31,14 @@ function Usuario(nick, juego) {
   };
 }
 
-function Partida(nombre) {
+function Partida(codigo, nick) {
   this.codigo;
   this.owner;
-  this.jugadores;
+  this.jugadores = [];
+  this.maxJugadores = 2;
+  this.agregarJugador = function (nick) {
+    if (this.jugadores.length < this.maxJugadores) {
+      this.jugadores.push(nick);
+    }
+  };
 }
