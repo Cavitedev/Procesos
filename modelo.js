@@ -7,15 +7,18 @@ function Juego() {
       this.usuarios[nick] = new Usuario(nick, this);
     }
   };
-  this.eliminarUsuario=function(nick){
+  this.eliminarUsuario = function (nick) {
     delete this.usuarios[nick];
-  }
+  };
 
   this.crearPartida = function (nick) {
     //Obtener uid
     //Crear partida
     //Asignar propietario a nick
     //Devolver partida
+    let codigo = Date.now();
+    this.partidas[codigo] = new Partida();
+    return codigo;
   };
 }
 
@@ -29,5 +32,7 @@ function Usuario(nick, juego) {
 }
 
 function Partida(nombre) {
-  this.nombre = nombre;
+  this.codigo;
+  this.owner;
+  this.jugadores;
 }
