@@ -1,17 +1,18 @@
 @startuml Modelo de clases
+!theme mars
 class Juego
 class Partida{
     codigo
+    owner
 }
 class Usuario{
     nickname
 }
-class Turno{
-
-}
+class Fase{}
+class Inicial{}
 
 Juego --> "1..* usuarios" Usuario
 Juego -->"0..* +partidas" Partida
 Partida -right->"2" Usuario
-Partida --> Turno
-Turno -->"1" Usuario
+Partida --> Fase
+Inicial -up-|> Fase

@@ -1,17 +1,18 @@
 @startuml Test Diagram
-Node Web{
-    component webApp
+!theme mars
+Node Navegador{
+    component cliente
 
 }
-Node RestApi{
-component api as "API REST"
-agent logica
+Node Server{
+file index as "index.js"
+file logica as "modelo.js"
 component datos
 
-api .down. logica
+index .down. logica
 logica .down. datos
 }
 database BBDD
 
-Web -- RestApi
-BBDD -up- RestApi
+Navegador --  Server: "HTTP"
+BBDD -up- Server

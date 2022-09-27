@@ -22,8 +22,11 @@ describe("El juego", function () {
 
     const partida = juego.partidas[partidaId];
 
-    expect(partida.owner).toEqual(usr1.nick);
-    expect(partida.jugadores).toEqual([usr1.nick, usr2.nick]);
+    expect(partida.owner.nick).toEqual(usr1.nick);
+    expect(partida.jugadores.map((partida) => partida.nick)).toEqual([
+      usr1.nick,
+      usr2.nick,
+    ]);
   });
 
   it("Crear juego y se unen otros dos, devuelve false al unirse el último y no se une", function () {
@@ -32,11 +35,15 @@ describe("El juego", function () {
     const resultadoUnirseUsr3 = usr3.unirseAPartida(partidaId);
 
     const partida = juego.partidas[partidaId];
+    expect(partida).toBeDefined();
 
     expect(resultadoUnirseUsr2).toEqual(true);
     expect(resultadoUnirseUsr3).toEqual(false);
-    expect(partida.owner).toEqual(usr1.nick);
-    expect(partida.jugadores).toEqual([usr1.nick, usr2.nick]);
+    expect(partida.owner.nick).toEqual(usr1.nick);
+    expect(partida.jugadores.map((partida) => partida.nick)).toEqual([
+      usr1.nick,
+      usr2.nick,
+    ]);
   });
 
   it("Usuario intenta unirse a una partida no existente, devuelve false", function () {
