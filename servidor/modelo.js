@@ -12,7 +12,14 @@ function Juego() {
     return this.usuarios[nick];
   };
   this.eliminarUsuario = function (nick) {
-    delete this.usuarios[nick];
+    existiaUsuario = this.usuarios[nick] != null;
+    eliminacionExitosa = delete this.usuarios[nick];
+    console.log(
+      haSidoEliminado
+        ? `Eliminado al usuario ${nick}`
+        : `no se pudo eliminar a ${nick}`
+    );
+    return eliminacionExitosa && existiaUsuario;
   };
 
   this.crearPartidaUsuario = function (usuario) {
@@ -44,12 +51,22 @@ function Juego() {
     return partida.agregarJugador(usuario);
   };
 
+  this.unirAPartidaNick = function (codigo, nick) {
+    let usuario = this.usuarios[nick];
+    if (!usuario) {
+      return -false;
+    }
+
+    let codigoPartida = usuario.unirseAPartida(codigo);
+    return codigoPartida;
+  };
+
   this.obtenerPartidas = function () {
     let lista = [];
     for (let key in this.partidas) {
       lista.push({
         codigo: key,
-        owner: this.partidas[key].owner,
+        owner: this.partidas[key].owner.nick,
       });
     }
     return lista;
@@ -80,6 +97,8 @@ function Usuario(nick, juego) {
   this.unirseAPartida = function (codigo) {
     return this.juego.unirAPartida(codigo, this);
   };
+
+  this.representacion = () => nick;
 }
 
 function Partida(codigo, usuario) {
@@ -93,6 +112,9 @@ function Partida(codigo, usuario) {
       return false;
     }
     this.jugadores.push(usuario);
+    console.log(
+      `El usuario ${usuario.nick} se ha unido a la partida ${codigo}`
+    );
     return true;
   };
 
