@@ -1,7 +1,12 @@
 "use strict";
 const express = require("express");
+const fs = require("fs");
 const app = express();
+const modelo = require("./servidor/modelo.js");
 
+const PORT = process.env.PORT || 3000;
+
+let juego = new modelo.Juego();
 /*
 "/"
 "/obtenerPartidas"
@@ -9,13 +14,29 @@ const app = express();
 ...
 */
 
+app.use(express.static(__dirname + "/"));
+
 app.get("/", (req, res) => {
-  res.status(200).send(`Hello`).end();
+  const contenido = fs.readFileSync(__dirname + "/cliente/src/index.html");
+  res.setHeader;
+  "Content-type", "text/html";
+  res.send(`${contenido}`);
 });
 
-const PORT = process.env.PORT || 8080;
+app.get("/agregarUsuario/:nick", (req, res) => {
+  let nick = req.params.nick;
+  let nuevoUsuario = juego.agregarUsuario(nick);
+  let output = { nick: nuevoUsuario ? nuevoUsuario.nick : -1 };
+  res.send(output);
+});
+
+app.get("/crearPartida/:nick", (req, res) => {
+  let nick = req.params.nick;
+  let codigoPartida = juego.crearPartidaNick(nick);
+  res.send({ partida: codigoPartida });
+});
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-  console.log("Press Ctrl+C to quit.");
+  console.log(`Express 👂 puerto ${PORT}`);
+  console.log("Presiona Ctrl+C para salir.");
 });

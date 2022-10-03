@@ -1,7 +1,12 @@
 @startuml Test Diagram
 !theme mars
 Node Navegador{
+    file indexWeb as "index.html"
+    file specRunner as "specRunner.html"
     component cliente
+
+
+    specRunner ..> cliente
 
 }
 Node Server{
@@ -9,10 +14,13 @@ file index as "index.js"
 file logica as "modelo.js"
 component datos
 
-index .down. logica
-logica .down. datos
+index .down.> logica
+logica .down.> datos
 }
+
+file Rest
+index .. Rest
 database BBDD
 
 Navegador --  Server: "HTTP"
-BBDD -up- Server
+BBDD -up- Server: "HTTP"
