@@ -59,20 +59,3 @@ app.listen(PORT, () => {
   console.log(`Express 👂 puerto ${PORT}`);
   console.log("Presiona Ctrl+C para salir.");
 });
-
-// const noCirculares = (v) => {
-//   const set = new Set();
-//   const noCirculares = (v) => {
-//     if (Array.isArray(noCirculares)) return v.map(noCirculares);
-//     if (typeof v === "object" && v !== null) {
-//       if (set.has(v)) return v.representacion() || undefined;
-//       set.add(v);
-
-//       return Object.fromEntries(
-//         Object.entries(v).map(([k, v]) => [k, noCirculares(v)])
-//       );
-//     }
-//     return v;
-//   };
-//   return noCirculares(v);
-// };

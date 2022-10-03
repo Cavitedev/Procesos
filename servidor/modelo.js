@@ -97,8 +97,6 @@ function Usuario(nick, juego) {
   this.unirseAPartida = function (codigo) {
     return this.juego.unirAPartida(codigo, this);
   };
-
-  this.representacion = () => nick;
 }
 
 function Partida(codigo, usuario) {
