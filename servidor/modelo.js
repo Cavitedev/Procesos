@@ -67,6 +67,7 @@ function Juego() {
       lista.push({
         codigo: key,
         owner: this.partidas[key].owner.nick,
+        fase: this.partidas[key].fase,
       });
     }
     return lista;
@@ -79,7 +80,7 @@ function Juego() {
       let partidaJson = lista[i];
       let partida = this.partidas[partidaJson.codigo];
       if (partida.estaDisponible()) {
-        filterLista.push(partida);
+        filterLista.push(partidaJson);
       }
     }
     return filterLista;
@@ -101,11 +102,12 @@ function Usuario(nick, juego) {
 
 function Partida(codigo, usuario) {
   this.codigo;
+  this.fase;
   this.owner = usuario;
   this.jugadores = [usuario];
   const maxJugadores = 2;
   this.agregarJugador = function (usuario) {
-    if (this.jugadores.length >= maxJugadores) {
+    if (!this.hayHueco()) {
       console.log("Partida llena");
       return false;
     }
@@ -119,6 +121,14 @@ function Partida(codigo, usuario) {
   this.estaDisponible = function () {
     return this.jugadores.length < maxJugadores;
   };
+
+  this.comprobarFase = function () {
+    if (!this.hayHueco()) {
+      this.fase = "jugando";
+    }
+  };
+
+  this.hayHueco = () => this.jugadores.length < maxJugadores;
 }
 
 module.exports.Juego = Juego;

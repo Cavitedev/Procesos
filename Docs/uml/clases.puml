@@ -10,9 +10,15 @@ class Usuario{
 }
 class Fase{}
 class Inicial{}
+class Jugando{}
+class Final{}
+
+Inicial -up-|> Fase
+Jugando -up-|> Fase
+Final -up-|> Fase
+
 
 Juego --> "1..* usuarios" Usuario
 Juego -->"0..* +partidas" Partida
 Partida -right->"2" Usuario
 Partida --> Fase
-Inicial -up-|> Fase

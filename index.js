@@ -55,6 +55,11 @@ app.get("/obtenerPartidas", (req, res) => {
   res.send(partidas);
 });
 
+app.get("/obtenerPartidasDisponibles", (req, res) => {
+  let partidas = juego.obtenerPartidasDisponibles();
+  res.send(partidas);
+});
+
 app.listen(PORT, () => {
   console.log(`Express 👂 puerto ${PORT}`);
   console.log("Presiona Ctrl+C para salir.");
