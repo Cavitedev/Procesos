@@ -1,4 +1,6 @@
 function ClienteRest() {
+  var ultimaPartidaCreada;
+
   this.agregarUsuario = function async(nick) {
     var cli = this;
     $.getJSON("/agregarUsuario/" + nick, function (data) {
@@ -44,6 +46,7 @@ function ClienteRest() {
         return;
       }
       console.log(`El usuario ${nick} ha creado la partida ${data.partida}`);
+      cli.ultimaPartidaCreada = data.partida;
       //$.cookie("nick",ws.nick);
       //iu.mostrarHome(data);
     });
@@ -54,7 +57,7 @@ function ClienteRest() {
     $.getJSON(`/unirAPartida/${codigo}/${nick}`, function (data) {
       console.log(data);
       if (!data.seHaUnido) {
-        console.log(`No se pudo unir al juego`);
+        console.log(`${nick} No se pudo unir al juego ${codigo}`);
         //iu.mostrarModal("El nick ya está en uso");
         //iu.mostrarAgregarJugador();
         return;
@@ -77,5 +80,15 @@ function ClienteRest() {
     $.getJSON("/obtenerPartidasDisponibles", function (data) {
       console.log(data);
     });
+  };
+
+  this.crearPartidaCon = function (nick1, nick2) {
+    //Jquery debería ser síncrono para que esto funcione
+    jQuery.ajaxSetup({ async: false });
+    this.agregarUsuario(nick1);
+    this.agregarUsuario(nick2);
+    this.crearPartida(nick1);
+    this.unirAPartida(this.ultimaPartidaCreada, nick2);
+    jQuery.ajaxSetup({ async: true });
   };
 }
