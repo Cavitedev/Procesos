@@ -2,17 +2,18 @@
 !theme mars
 Node Navegador{
     file indexWeb as "index.html"
-    file specRunner as "specRunner.html"
-    component cliente
+    file clienteRest as "clienteRest.js"
+    file controlWeb as "controlWeb.js"
 
 
-    specRunner ..> cliente
+    indexWeb ..> clienteRest
+    indexWeb ..> controlWeb
 
 }
 Node Server{
 file index as "index.js"
 file logica as "modelo.js"
-component datos
+component datos as "Capa Acceso a Datos"
 
 index .down.> logica
 logica .down.> datos

@@ -47,7 +47,7 @@ app.get("/unirAPartida/:codigo/:nick", (req, res) => {
   let codigo = req.params.codigo;
   let nick = req.params.nick;
   let codigoPartida = juego.unirAPartidaNick(codigo, nick);
-  res.send({ partida: codigo, seHaUnido: codigoPartida });
+  res.send({ seHaUnido: codigoPartida });
 });
 
 app.get("/obtenerPartidas", (req, res) => {

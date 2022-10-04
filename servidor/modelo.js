@@ -54,7 +54,7 @@ function Juego() {
   this.unirAPartidaNick = function (codigo, nick) {
     let usuario = this.usuarios[nick];
     if (!usuario) {
-      return -false;
+      return false;
     }
 
     let codigoPartida = usuario.unirseAPartida(codigo);
