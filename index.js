@@ -62,5 +62,6 @@ app.get("/obtenerPartidasDisponibles", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Express 👂 puerto ${PORT}`);
+  console.log(`http://localhost:${PORT}`);
   console.log("Presiona Ctrl+C para salir.");
 });

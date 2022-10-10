@@ -1,17 +1,21 @@
 function ClienteRest() {
   var ultimaPartidaCreada;
+  var nick;
 
   this.agregarUsuario = function async(nick) {
     var cli = this;
     $.getJSON("/agregarUsuario/" + nick, function (data) {
       console.log(data);
       if (data.nick == -1) {
-        console.log(`El usuario ${data.nick} ya está en uso`);
+        console.log(`El usuario ${nick} ya está en uso`);
+        iu.mostrarAgregarUsuario();
         //iu.mostrarModal("El nick ya está en uso");
         //iu.mostrarAgregarJugador();
         return;
       }
-      console.log(`El usuario ${data.nick} se ha registrado`);
+      console.log(`El usuario ${nick} se ha registrado`);
+      cli.nick = nick;
+      iu.mostrarHome();
       //   ws.nick = data.nick;
       //$.cookie("nick",ws.nick);
       //iu.mostrarHome(data);
