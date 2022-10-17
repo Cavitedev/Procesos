@@ -2,7 +2,7 @@ function ClienteRest() {
   var ultimaPartidaCreada;
   var nick;
 
-  this.agregarUsuario = function async(nick) {
+  this.agregarUsuario = function (nick) {
     var cli = this;
     $.getJSON("/agregarUsuario/" + nick, function (data) {
       console.log(data);
@@ -16,6 +16,8 @@ function ClienteRest() {
       console.log(`El usuario ${nick} se ha registrado`);
       cli.nick = nick;
       iu.mostrarHome();
+      iu.mostrarCrearPartida();
+      iu.mostrarListaDePartidas();
       //   ws.nick = data.nick;
       //$.cookie("nick",ws.nick);
       //iu.mostrarHome(data);
@@ -51,6 +53,8 @@ function ClienteRest() {
       }
       console.log(`El usuario ${nick} ha creado la partida ${data.partida}`);
       cli.ultimaPartidaCreada = data.partida;
+      iu.mostrarListaDePartidas();
+      iu.mostrarCodigo(data.partida);
       //$.cookie("nick",ws.nick);
       //iu.mostrarHome(data);
     });
@@ -83,6 +87,7 @@ function ClienteRest() {
     var cli = this;
     $.getJSON("/obtenerPartidasDisponibles", function (data) {
       console.log(data);
+      iu.mostrarListaDePartidasCallback(data);
     });
   };
 

@@ -32,28 +32,74 @@ function ControlWeb() {
   };
 
   this.mostrarHome = function () {
-    $("#mH").remove();
-    var cadena = `
-    <h2>Bienvenido ${rest.nick}</h2>
-    <div><p>Home</p></div>
-    `;
-    $("#mH").append(cadena);
+    var cadena =
+      "<div class = 'row' id='mH'>" +
+      "<div class='col'>" +
+      "<h2>Bienvenido " +
+      rest.nick +
+      "</h2>" +
+      "<div id='codigo'" +
+      "</div>" +
+      "</div>";
+    $("#mH").html(cadena);
     // this.mostrarCrearPartida();
   };
 
   this.mostrarCrearPartida = function () {
     //Dibujar un botón que al hacer click llame a crear partida
-
-    $("#contenido").remove();
-    var cadena = `<button id="btnAP" class="btn btn-primary mb-2 mr-sm-2">Crear Partida</button>`;
-    $("#contenido").append(cadena);
+    $("mCP").remove();
+    var cadena =
+      "<div class='row' id='mCP'>" +
+      "<div class='col'>" +
+      "<button id='btnAP' class='btn btn-primary mb-2 mr-sm-2'>Crear Partida</button>" +
+      "</div>" +
+      "</div>";
+    $("#crearPartida").html(cadena);
 
     $("#btnAP").on("click", function (e) {
+      // $("#mCP").remove();
       rest.crearPartida(rest.nick);
     });
   };
 
+  this.mostrarCodigo = function (codigo) {
+    $("#cP").remove();
+    var cadena =
+      "<div id='cP'><p> Código de la partida: " + codigo + "</p></div>";
+    $("#codigo").append(cadena);
+  };
+
   this.mostrarListaDePartidas = function () {
-    //Crear lista html
+    $("#mLP").remove();
+    var cadena =
+      "<div class='row' id='mLP'><ul class='list-group' id='LP'></ul></div>";
+    $("#listaPartidas").append(cadena);
+
+    rest.obtenerPartidasDisponibles();
+  };
+
+  this.mostrarListaDePartidasCallback = function (partidas) {
+    for (partida of partidas) {
+      var cadena =
+        "<li class='list-group-item'><span>" +
+        "Código: " +
+        partida.codigo +
+        "</span>  " +
+        "<span>" +
+        "Propietario:" +
+        partida.owner +
+        "</span>" +
+        "<button id='btnUP' data-value='" +
+        partida.codigo +
+        "'" +
+        " class='btn btn-primary mb-2 mr-sm-2'>Unir Partida</button>" +
+        "</li>";
+      $("#LP").append(cadena);
+
+      $("#btnUP").on("click", function (e) {
+        var codigo = $(this).data("value");
+        rest.unirAPartida(codigo, rest.nick);
+      });
+    }
   };
 }
