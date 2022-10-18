@@ -16,8 +16,8 @@ function ClienteRest() {
       console.log(`El usuario ${nick} se ha registrado`);
       cli.nick = nick;
       iu.mostrarHome();
-      iu.mostrarCrearPartida();
       iu.mostrarListaDePartidas();
+      iu.mostrarCrearPartida();
       //   ws.nick = data.nick;
       //$.cookie("nick",ws.nick);
       //iu.mostrarHome(data);
@@ -71,8 +71,9 @@ function ClienteRest() {
         return;
       }
       console.log(`El usuario ${nick} se ha unido a la partida ${codigo}`);
+      iu.mostrarCodigo(data.partida);
       //$.cookie("nick",ws.nick);
-      //iu.mostrarHome(data);
+      //iu.mostrar                  Home(data);
     });
   };
 

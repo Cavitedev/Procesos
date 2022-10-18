@@ -72,8 +72,19 @@ function ControlWeb() {
   this.mostrarListaDePartidas = function () {
     $("#mLP").remove();
     var cadena =
-      "<div class='row' id='mLP'><ul class='list-group' id='LP'></ul></div>";
+      "<div class='col' id='mLP'>" +
+      "<button  id='btnRP' class='btn btn-info btn-labeled mb-2 mr-sm-2'><span class='btn-label'><i class='fa fa-refresh'></i></span> Refrescar</button> " +
+      "<div class='row'>" +
+      "<ul class='list-group' id='LP'></ul></div>" +
+      "</div>";
+
     $("#listaPartidas").append(cadena);
+
+    $("#btnRP").on("click", function (e) {
+      // $("#mCP").remove();
+      $("#LP").html("");
+      rest.obtenerPartidasDisponibles();
+    });
 
     rest.obtenerPartidasDisponibles();
   };
@@ -92,7 +103,7 @@ function ControlWeb() {
         "<button id='btnUP' data-value='" +
         partida.codigo +
         "'" +
-        " class='btn btn-primary mb-2 mr-sm-2'>Unir Partida</button>" +
+        " class='btn btn-secondary mb-2 mr-sm-2 m-2'>Unir a Partida</button>" +
         "</li>";
       $("#LP").append(cadena);
 
