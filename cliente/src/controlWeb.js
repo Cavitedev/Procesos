@@ -147,6 +147,12 @@ function ControlWeb() {
       });
     }
   };
+  this.mostrarModal = function (msg) {
+    $("#mM").remove();
+    var cadena = "<p id='mM'>" + msg + "</p>";
+    $("#contenidoModal").append(cadena);
+    $("#miModal").modal("show");
+  };
 
   this.limpiarPantalla = function () {
     $("#mCP").remove();

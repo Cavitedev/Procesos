@@ -8,7 +8,7 @@ function ClienteRest() {
       if (data.nick == -1) {
         console.log(`El usuario ${nick} ya está en uso`);
         iu.mostrarAgregarUsuario();
-        //iu.mostrarModal("El nick ya está en uso");
+        iu.mostrarModal("El nick ya está en uso");
         //iu.mostrarAgregarJugador();
         return;
       }
@@ -71,7 +71,6 @@ function ClienteRest() {
       console.log(data);
       if (!data.seHaUnido) {
         console.log(`${nick} No se pudo unir al juego ${codigo}`);
-        //iu.mostrarModal("El nick ya está en uso");
         //iu.mostrarAgregarJugador();
         return;
       }
