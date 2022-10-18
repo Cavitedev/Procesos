@@ -12,14 +12,15 @@ function Juego() {
     return this.usuarios[nick];
   };
   this.eliminarUsuario = function (nick) {
-    existiaUsuario = this.usuarios[nick] != null;
-    eliminacionExitosa = delete this.usuarios[nick];
+    let existiaUsuario = this.usuarios[nick] != null;
+    let eliminacionExitosa = delete this.usuarios[nick];
+    let haSidoEliminado = eliminacionExitosa && existiaUsuario;
     console.log(
       haSidoEliminado
         ? `Eliminado al usuario ${nick}`
         : `no se pudo eliminar a ${nick}`
     );
-    return eliminacionExitosa && existiaUsuario;
+    return haSidoEliminado;
   };
 
   this.crearPartidaUsuario = function (usuario) {

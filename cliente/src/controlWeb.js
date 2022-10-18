@@ -1,4 +1,20 @@
 function ControlWeb() {
+  this.recuperarSesion = function () {
+    usuario = $.cookie("nick");
+    if (!usuario) {
+      this.mostrarAgregarUsuario();
+      return;
+    }
+    rest.agregarUsuarioDesdeCookie(usuario);
+  };
+
+  this.recuperarSesionCallback = function () {
+    this.mostrarHome();
+    partida = $.cookie("codigoP");
+    if (partida) {
+      this.mostrarCodigo(partida);
+    }
+  };
   this.mostrarAgregarUsuario = function () {
     var cadena = '<div id="mAU"><h2>Inicio de Sesión</h2><div class="row" >'; //'<form class="form-row needs-validation"  id="mAU">';
     cadena = cadena + '<div class="col"><h2>El juego indefinido</h2></div>';
@@ -32,17 +48,33 @@ function ControlWeb() {
   };
 
   this.mostrarHome = function () {
+    var cli = this;
+
+    $("#mHin").remove();
     var cadena =
-      "<div class = 'row' id='mH'>" +
+      "<div class = 'row' id='mHin'>" +
       "<div class='col'>" +
       "<h2>Bienvenido " +
-      rest.nick +
+      $.cookie("nick") +
       "</h2>" +
       "<div id='codigo'" +
       "</div>" +
       "</div>";
-    $("#mH").html(cadena);
-    // this.mostrarCrearPartida();
+    $("#mH").append(cadena);
+    this.mostrarCrearPartida();
+    this.mostrarListaDePartidas();
+
+    var cadenaCerrarSesion =
+      "<button id='btnLO' class='btn btn-primary mb-2 mr-sm-2'>Cerrar Sesión</button>";
+    $("#logOut").append(cadenaCerrarSesion);
+
+    $("#btnLO").on("click", function (e) {
+      rest.eliminarUsuario($.cookie("nick"));
+      $.cookie("nick", null);
+      $.cookie("codigoP", null);
+      cli.limpiarPantalla();
+      cli.mostrarAgregarUsuario();
+    });
   };
 
   this.mostrarCrearPartida = function () {
@@ -57,16 +89,18 @@ function ControlWeb() {
     $("#crearPartida").html(cadena);
 
     $("#btnAP").on("click", function (e) {
-      // $("#mCP").remove();
-      rest.crearPartida(rest.nick);
+      rest.crearPartida($.cookie("nick"));
     });
   };
 
   this.mostrarCodigo = function (codigo) {
+    $("#mCP").remove();
     $("#cP").remove();
-    var cadena =
-      "<div id='cP'><p> Código de la partida: " + codigo + "</p></div>";
-    $("#codigo").append(cadena);
+    if (codigo) {
+      var cadena =
+        "<div id='cP'><p> Código de la partida: " + codigo + "</p></div>";
+      $("#codigo").append(cadena);
+    }
   };
 
   this.mostrarListaDePartidas = function () {
@@ -112,5 +146,16 @@ function ControlWeb() {
         rest.unirAPartida(codigo, rest.nick);
       });
     }
+  };
+
+  this.limpiarPantalla = function () {
+    $("#mCP").remove();
+    $("#cP").remove();
+    $("#mLP").remove();
+    $("#btnLO").remove();
+    $("#btnAP").remove();
+    $("#mHin").remove();
+    $("#mAU").remove();
+    $("#LP").html("");
   };
 }

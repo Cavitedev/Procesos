@@ -23,6 +23,13 @@ app.get("/", (req, res) => {
   res.send(`${contenido}`);
 });
 
+app.get("/leerUsuario/:nick", (req, res) => {
+  let nick = req.params.nick;
+  let usuario = juego.usuarios[nick];
+  let output = { nick: usuario ? usuario.nick : -1 };
+  res.send(output);
+});
+
 app.get("/agregarUsuario/:nick", (req, res) => {
   let nick = req.params.nick;
   let nuevoUsuario = juego.agregarUsuario(nick);

@@ -1,6 +1,5 @@
 function ClienteRest() {
   var ultimaPartidaCreada;
-  var nick;
 
   this.agregarUsuario = function (nick) {
     var cli = this;
@@ -14,13 +13,18 @@ function ClienteRest() {
         return;
       }
       console.log(`El usuario ${nick} se ha registrado`);
-      cli.nick = nick;
+      $.cookie("nick", nick);
       iu.mostrarHome();
       iu.mostrarListaDePartidas();
-      iu.mostrarCrearPartida();
       //   ws.nick = data.nick;
-      //$.cookie("nick",ws.nick);
       //iu.mostrarHome(data);
+    });
+  };
+
+  this.agregarUsuarioDesdeCookie = function (nick) {
+    var cli = this;
+    $.getJSON("/agregarUsuario/" + nick, function (data) {
+      iu.recuperarSesionCallback();
     });
   };
 
@@ -36,7 +40,7 @@ function ClienteRest() {
       }
       console.log(`El usuario ${data.nick} se ha eliminado`);
       //   ws.nick = data.nick;
-      //$.cookie("nick",ws.nick);
+      $.cookie("nick", data.nick);
       //iu.mostrarHome(data);
     });
   };
@@ -55,7 +59,8 @@ function ClienteRest() {
       cli.ultimaPartidaCreada = data.partida;
       iu.mostrarListaDePartidas();
       iu.mostrarCodigo(data.partida);
-      //$.cookie("nick",ws.nick);
+      $.cookie("nick", nick);
+      $.cookie("codigoP", data.partida);
       //iu.mostrarHome(data);
     });
   };
@@ -72,7 +77,7 @@ function ClienteRest() {
       }
       console.log(`El usuario ${nick} se ha unido a la partida ${codigo}`);
       iu.mostrarCodigo(data.partida);
-      //$.cookie("nick",ws.nick);
+      $.cookie("nick", nick);
       //iu.mostrar                  Home(data);
     });
   };
