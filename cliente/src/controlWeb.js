@@ -89,7 +89,7 @@ function ControlWeb() {
     $("#crearPartida").html(cadena);
 
     $("#btnAP").on("click", function (e) {
-      rest.crearPartida($.cookie("nick"));
+      cws.crearPartida($.cookie("nick"));
     });
   };
 
@@ -124,9 +124,11 @@ function ControlWeb() {
   };
 
   this.mostrarListaDePartidasCallback = function (partidas) {
+    $(".linea-partida").remove();
+
     for (partida of partidas) {
       var cadena =
-        "<li class='list-group-item'><span>" +
+        "<li class='linea-partida list-group-item'><span>" +
         "Código: " +
         partida.codigo +
         "</span>  " +
@@ -143,7 +145,7 @@ function ControlWeb() {
 
       $("#btnUP").on("click", function (e) {
         var codigo = $(this).data("value");
-        rest.unirAPartida(codigo, rest.nick);
+        cws.unirAPartida($.cookie("nick"), codigo);
       });
     }
   };

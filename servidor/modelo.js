@@ -64,6 +64,10 @@ function Juego() {
     return codigoPartida;
   };
 
+  this.obtenerPartida = function (codigo) {
+    return this.partidas[codigo];
+  };
+
   this.unirAPartida = function (codigo, usuario) {
     const partida = this.partidas[codigo];
     if (!partida) {
@@ -157,6 +161,10 @@ function Partida(codigo, usuario) {
     if (!this.hayHueco()) {
       this.fase = "jugando";
     }
+  };
+
+  this.esJugando = function () {
+    return this.fase == "jugando";
   };
 
   this.esOwnerDe = function (nick) {

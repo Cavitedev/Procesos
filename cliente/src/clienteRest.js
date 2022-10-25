@@ -2,7 +2,7 @@ function ClienteRest() {
   var ultimaPartidaCreada;
 
   this.agregarUsuario = function (nick) {
-    let cli = this;
+    var cli = this;
     $.getJSON("/agregarUsuario/" + nick, function (data) {
       console.log(data);
       if (data.nick == -1) {
@@ -15,21 +15,20 @@ function ClienteRest() {
       console.log(`El usuario ${nick} se ha registrado`);
       $.cookie("nick", nick);
       iu.mostrarHome();
-      iu.mostrarListaDePartidas();
       //   ws.nick = data.nick;
       //iu.mostrarHome(data);
     });
   };
 
   this.agregarUsuarioDesdeCookie = function (nick) {
-    let cli = this;
+    var cli = this;
     $.getJSON("/agregarUsuario/" + nick, function (data) {
       iu.recuperarSesionCallback();
     });
   };
 
   this.eliminarUsuario = function (nick) {
-    let cli = this;
+    var cli = this;
     $.getJSON("/eliminarUsuario/" + nick, function (data) {
       console.log(data);
       if (!data.eliminado) {
@@ -46,7 +45,7 @@ function ClienteRest() {
   };
 
   this.crearPartida = function (nick) {
-    let cli = this;
+    var cli = this;
     $.getJSON("/crearPartida/" + nick, function (data) {
       console.log(data);
       if (data.partida == -1) {
@@ -65,8 +64,8 @@ function ClienteRest() {
     });
   };
 
-  this.unirAPartida = function (codigo, nick) {
-    let cli = this;
+  this.unirAPartida = function (nick, codigo) {
+    var cli = this;
     $.getJSON(`/unirAPartida/${codigo}/${nick}`, function (data) {
       console.log(data);
       if (!data.seHaUnido) {
@@ -77,19 +76,20 @@ function ClienteRest() {
       console.log(`El usuario ${nick} se ha unido a la partida ${codigo}`);
       iu.mostrarCodigo(data.partida);
       $.cookie("nick", nick);
+      $.cookie("codigoP", codigo);
       //iu.mostrar                  Home(data);
     });
   };
 
   this.obtenerPartidas = function () {
-    let cli = this;
+    var cli = this;
     $.getJSON("/obtenerPartidas", function (data) {
       console.log(data);
     });
   };
 
   this.obtenerPartidasDisponibles = function () {
-    let cli = this;
+    var cli = this;
     $.getJSON("/obtenerPartidasDisponibles", function (data) {
       console.log(data);
       iu.mostrarListaDePartidasCallback(data);
@@ -102,7 +102,7 @@ function ClienteRest() {
     this.agregarUsuario(nick1);
     this.agregarUsuario(nick2);
     this.crearPartida(nick1);
-    this.unirAPartida(this.ultimaPartidaCreada, nick2);
+    this.unirAPartida(nick2, this.ultimaPartidaCreada);
     jQuery.ajaxSetup({ async: true });
   };
 }
