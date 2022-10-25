@@ -1,4 +1,4 @@
-function clienteWS() {
+function ClienteWS() {
   this.socker = io();
 
   //Enviar Peticiones

@@ -1,9 +1,8 @@
 function ServidorWS() {
-  //Enviar Peticiones
+  //enviar peticiones
 
-  //Gestionar Peticiones
-
-  const lanzarServidorWS = function (io, juego) {
+  //gestionar peticiones
+  this.lanzarServidorWS = function (io, juego) {
     io.on("connection", (socket) => {
       console.log("Usuario conectado");
     });

@@ -8,12 +8,12 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 const modelo = require("./servidor/modelo.js");
-const sWS = require("./servidor/servidorWS.jsu");
+const sWS = require("./servidor/servidorWS.js");
 
 const PORT = process.env.PORT || 3000;
 
 let juego = new modelo.Juego();
-let servidorWS = new sWS.servidorWS();
+let servidorWS = new sWS.ServidorWS();
 /*
 "/"
 "/obtenerPartidas"
@@ -75,7 +75,7 @@ app.get("/obtenerPartidasDisponibles", (req, res) => {
   res.send(partidas);
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Express 👂 puerto ${PORT}`);
   console.log(`http://localhost:${PORT}`);
   console.log("Presiona Ctrl+C para salir.");
