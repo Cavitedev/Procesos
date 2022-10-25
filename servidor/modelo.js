@@ -12,6 +12,8 @@ function Juego() {
     return this.usuarios[nick];
   };
   this.eliminarUsuario = function (nick) {
+    this.finalizarJuegosDe(nick);
+
     let existiaUsuario = this.usuarios[nick] != null;
     let eliminacionExitosa = delete this.usuarios[nick];
     let haSidoEliminado = eliminacionExitosa && existiaUsuario;
@@ -21,6 +23,25 @@ function Juego() {
         : `no se pudo eliminar a ${nick}`
     );
     return haSidoEliminado;
+  };
+
+  this.finalizarJuegosDe = function (nick) {
+    for (let codigoPartida in this.partidas) {
+      let partida = this.partidas[codigoPartida];
+      if (partida.esOwnerDe(nick)) {
+        partida.fase = "final";
+        console.log(
+          `La partida ${partida.codigo} pasa a finalizada porque el propietario ${nick} dejó el juego`
+        );
+      } else if (partida.esJugadoPor(nick)) {
+        if (partida.fase == "inicial") {
+          partida.eliminarJugador(nick);
+          console.log(
+            `El jugador "${nick}" abandona la partida ${partida.codigo}`
+          );
+        }
+      }
+    }
   };
 
   this.crearPartidaUsuario = function (usuario) {
@@ -103,7 +124,7 @@ function Usuario(nick, juego) {
 
 function Partida(codigo, usuario) {
   this.codigo;
-  this.fase;
+  this.fase = "inicial";
   this.owner = usuario;
   this.jugadores = [usuario];
   const maxJugadores = 2;
@@ -116,7 +137,16 @@ function Partida(codigo, usuario) {
     console.log(
       `El usuario ${usuario.nick} se ha unido a la partida ${codigo}`
     );
+
+    this.comprobarFase();
     return true;
+  };
+
+  this.eliminarJugador = function (nick) {
+    let idx = this.jugadores.findIndex((p) => p.nick == nick);
+    if (idx != -1) {
+      this.jugadores.splice(idx, 1);
+    }
   };
 
   this.estaDisponible = function () {
@@ -127,6 +157,14 @@ function Partida(codigo, usuario) {
     if (!this.hayHueco()) {
       this.fase = "jugando";
     }
+  };
+
+  this.esOwnerDe = function (nick) {
+    return this.owner.nick == nick;
+  };
+
+  this.esJugadoPor = function (nick) {
+    return this.jugadores.some((j) => j.nick == nick);
   };
 
   this.hayHueco = () => this.jugadores.length < maxJugadores;

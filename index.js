@@ -1,12 +1,19 @@
-"use strict";
 const express = require("express");
 const fs = require("fs");
 const app = express();
+
+const http = require("http");
+const server = http.createServer(app);
+const { Server } = require("socket.io");
+const io = new Server(server);
+
 const modelo = require("./servidor/modelo.js");
+const sWS = require("./servidor/servidorWS.jsu");
 
 const PORT = process.env.PORT || 3000;
 
 let juego = new modelo.Juego();
+let servidorWS = new sWS.servidorWS();
 /*
 "/"
 "/obtenerPartidas"
@@ -39,6 +46,7 @@ app.get("/agregarUsuario/:nick", (req, res) => {
 
 app.get("/eliminarUsuario/:nick", (req, res) => {
   let nick = req.params.nick;
+
   let haSidoEliminado = juego.eliminarUsuario(nick);
   let output = { eliminado: haSidoEliminado };
   res.send(output);
@@ -72,3 +80,5 @@ app.listen(PORT, () => {
   console.log(`http://localhost:${PORT}`);
   console.log("Presiona Ctrl+C para salir.");
 });
+
+servidorWS.lanzarServidorWS(io, juego);

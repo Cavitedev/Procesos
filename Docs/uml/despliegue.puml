@@ -4,18 +4,25 @@ Node Navegador{
     file indexWeb as "index.html"
     file clienteRest as "clienteRest.js"
     file controlWeb as "controlWeb.js"
+    file clienteWS as "clienteWS.js"
+    file jquery as "jquery.js"
 
 
+    indexWeb ..> jquery
     indexWeb ..> clienteRest
     indexWeb ..> controlWeb
+    indexWeb ..> clienteWS
 
 }
 Node Server{
 file index as "index.js"
 file logica as "modelo.js"
+file servidorWS as "servidorWS.js"
 component datos as "Capa Acceso a Datos"
 
 index .down.> logica
+index ..> servidorWS
+servidorWS .> logica
 logica .down.> datos
 }
 
