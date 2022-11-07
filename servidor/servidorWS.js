@@ -9,6 +9,10 @@ function ServidorWS() {
     io.sockets.in(codigo).emit(mensaje, datos);
   };
 
+  this.enviarATodos = function (socket, mensaje, datos) {
+    socket.broadcast.emit(mensaje, datos);
+  };
+
   //gestionar peticiones
   this.lanzarServidorWS = function (io, juego) {
     let cli = this;
@@ -18,15 +22,19 @@ function ServidorWS() {
       socket.on("crearPartida", function (nick) {
         let codigoPartida = juego.crearPartidaNick(nick);
         if (codigoPartida) {
-          socket.join(res.codigo);
+          socket.join(codigoPartida);
         }
-        cli.enviarAlRemitente(socket, "partidaCreada", codigoPartida);
+        cli.enviarAlRemitente(socket, "partidaCreada", {
+          partida: codigoPartida,
+        });
+        let lista = juego.obtenerPartidasDisponibles();
+        cli.enviarATodos(socket, "actualizarListaPartidas", lista);
       });
 
       socket.on("unirAPartida", function (nick, codigo) {
         let seHaUnido = juego.unirAPartidaNick(codigo, nick);
         if (seHaUnido) {
-          socket.join(res.codigo);
+          socket.join(codigo);
         }
         cli.enviarAlRemitente(socket, "unidoAPartida", {
           nick: nick,
@@ -34,8 +42,9 @@ function ServidorWS() {
           seHaUnido: seHaUnido,
         });
 
-        if (partida.fase.esJugando()) {
-          this.enviarATodosEnPartida(io, codigo, "aJugar", {});
+        let partida = juego.obtenerPartida(codigo);
+        if (partida.esJugando()) {
+          cli.enviarATodosEnPartida(io, codigo, "aJugar", { codigo: codigo });
         }
       });
     });

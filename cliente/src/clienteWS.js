@@ -1,4 +1,5 @@
 function ClienteWS() {
+  var codigo;
   this.socket = io();
 
   //Enviar Peticiones
@@ -20,14 +21,16 @@ function ClienteWS() {
         console.log(`No se pudo crear un juego`);
         return;
       }
-      console.log(`El usuario ha creado la partida ${data.partida}`);
-      cli.ultimaPartidaCreada = data.partida;
+      cli.codigo = data["partida"];
+      console.log(`El usuario ha creado la partida ${cli.codigo}`);
+      cli.ultimaPartidaCreada = cli.codigo;
       iu.mostrarListaDePartidas();
-      iu.mostrarCodigo(data.partida);
+      iu.mostrarCodigo(cli.codigo);
     });
 
     this.socket.on("unidoAPartida", function (datos) {
       let codigo = datos.codigoPartida;
+      cli.codigo = codigo;
       let nick = datos.nick;
       if (!datos.seHaUnido) {
         console.log(`${nick} No se pudo unir al juego ${codigo}`);
@@ -43,6 +46,14 @@ function ClienteWS() {
 
     this.socket.on("aJugar", function (datos) {
       console.log("ha iniciado una partida en la que estaba unido");
+      iu.mostrarCodigo(datos["codigo"]);
+    });
+
+    this.socket.on("actualizarListaPartidas", function (lista) {
+      if (!cli.codigo) {
+        console.log("Actualizar lista partidas");
+        iu.mostrarListaDePartidas();
+      }
     });
   };
 }

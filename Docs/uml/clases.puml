@@ -4,21 +4,55 @@ class Juego
 class Partida{
     codigo
     owner
+    estado
+    turno
 }
 class Usuario{
     nickname
 }
+
+class Jugador{
+
+}
+
 class Fase{}
 class Inicial{}
 class Jugando{}
 class Final{}
+class Barco{
+    tamano
+    vida
+    desplegado
+    estado
+    orientacion
+}
+class Tablero{
+    tamano
+}
+class Celda{}
+class ElementoCelda{
+    {method} recibirDisparo()
+}
+class CeldaBarco{}
+class Agua{}
+
 
 Inicial -up-|> Fase
 Jugando -up-|> Fase
 Final -up-|> Fase
 
+Agua -up-|> ElementoCelda
+CeldaBarco -up-|> ElementoCelda
 
 Juego --> "1..* usuarios" Usuario
 Juego -->"0..* +partidas" Partida
-Partida -right->"2" Usuario
+Partida -right-"2" Jugador
 Partida --> Fase
+
+Jugador -->"1" Usuario
+
+Jugador -->"1..*" Barco
+Jugador --> Tablero
+Tablero --> Celda
+Celda --> ElementoCelda
+CeldaBarco -->"1" Barco 
