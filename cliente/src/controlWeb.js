@@ -58,9 +58,8 @@ function ControlWeb() {
       $.cookie("nick") +
       "</h2>" +
       "<div id='partida'>" +
-      "<div id='codigo'></div>" +
-      "<div id='SP'></div>";
-    "</div>" + "</div>";
+      "</div>" +
+      "</div>";
     $("#mH").append(cadena);
     this.mostrarCrearPartida();
     this.mostrarListaDePartidas();
@@ -97,6 +96,13 @@ function ControlWeb() {
   this.mostrarPartidaUnido = (codigo) => {
     $("#mCP").remove();
     $("#cP").remove();
+    $("#partida").html("");
+
+    let cadenaCodigo = "<div id='codigo'></div>";
+    let cadenaBoton = "<div id='SP'></div>";
+    $("#partida").append(cadenaCodigo);
+    $("#partida").append(cadenaBoton);
+
     this.mostrarCodigo(codigo);
     this.mostrarBotonSalirPartida(codigo);
   };

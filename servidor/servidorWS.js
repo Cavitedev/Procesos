@@ -43,7 +43,7 @@ function ServidorWS() {
         });
 
         let partida = juego.obtenerPartida(codigo);
-        if (partida.esJugando()) {
+        if (partida.esDesplegando()) {
           cli.enviarATodosEnPartida(io, codigo, "aJugar", { codigo: codigo });
         }
       });
