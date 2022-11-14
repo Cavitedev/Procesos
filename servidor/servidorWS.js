@@ -22,7 +22,7 @@ function ServidorWS() {
       socket.on("crearPartida", function (nick) {
         let codigoPartida = juego.crearPartidaNick(nick);
         if (codigoPartida) {
-          socket.join(codigoPartida);
+          socket.join(codigoPartida.toString());
         }
         cli.enviarAlRemitente(socket, "partidaCreada", {
           partida: codigoPartida,
@@ -32,9 +32,15 @@ function ServidorWS() {
       });
 
       socket.on("unirAPartida", function (nick, codigo) {
+        let partida = juego.obtenerPartida(codigo);
+        if (!partida) {
+          console.log("Partida null en unir partida");
+          return;
+        }
+
         let seHaUnido = juego.unirAPartidaNick(codigo, nick);
         if (seHaUnido) {
-          socket.join(codigo);
+          socket.join(codigo.toString());
         }
         cli.enviarAlRemitente(socket, "unidoAPartida", {
           nick: nick,
@@ -42,9 +48,10 @@ function ServidorWS() {
           seHaUnido: seHaUnido,
         });
 
-        let partida = juego.obtenerPartida(codigo);
         if (partida.esDesplegando()) {
-          cli.enviarATodosEnPartida(io, codigo, "aJugar", { codigo: codigo });
+          cli.enviarATodosEnPartida(io, codigo.toString(), "aDesplegar", {
+            codigo: codigo,
+          });
         }
       });
 
@@ -52,6 +59,40 @@ function ServidorWS() {
         juego.finalizarJuego(nick, codigo);
         socket.leave(codigo);
         cli.enviarAlRemitente(socket, "partidaEliminada", {});
+      });
+
+      socket.on(
+        "colocarBarco",
+        function (nick, codigo, barco, x, y, orientacion) {
+          let partida = juego.obtenerPartida(codigo);
+          if (!partida) {
+            console.log(`No se encontró la partida ${codigo}`);
+            return;
+          }
+          let jugador = partida.obtenerJugador(nick);
+          let haSidoColocado = jugador.colocarBarco(barco, x, y, orientacion);
+
+          cli.enviarAlRemitente(socket, "barcoColocado", {
+            haSidoColocado: haSidoColocado,
+          });
+          // Añadir barco
+        }
+      );
+
+      socket.on("barcosDesplegados", function (nick, codigo) {
+        let partida = juego.obtenerPartida(codigo);
+        let jugador = partida.obtenerJugador(nick);
+        let haSidoDesplegado = jugador.barcosDesplegados();
+
+        cli.enviarAlRemitente(socket, "barcoDesplegadosCallback", {
+          haSidoDesplegado: haSidoDesplegado,
+        });
+
+        if (partida.esJugando()) {
+          cli.enviarATodosEnPartida(io, codigo.toString(), "aJugar", {
+            codigo: codigo,
+          });
+        }
       });
     });
   };

@@ -1,5 +1,4 @@
 function ClienteWS() {
-  var codigo;
   this.socket = io();
 
   //Enviar Peticiones
@@ -13,6 +12,26 @@ function ClienteWS() {
 
   this.salirPartida = function (nick, codigo) {
     this.socket.emit("salirPartida", nick, codigo);
+  };
+
+  this.colocarBarco = function (barco, x, y, orientacion = "horizontal") {
+    this.socket.emit(
+      "colocarBarco",
+      $.cookie("nick"),
+      $.cookie("codigoP"),
+      barco,
+      x,
+      y,
+      orientacion
+    );
+  };
+
+  this.barcosDesplegados = function () {
+    this.socket.emit(
+      "barcosDesplegados",
+      $.cookie("nick"),
+      $.cookie("codigoP")
+    );
   };
 
   //colocarBarco
@@ -30,6 +49,8 @@ function ClienteWS() {
         return;
       }
       cli.codigo = data["partida"];
+      $.cookie("codigoP", cli.codigo);
+
       console.log(`El usuario ha creado la partida ${cli.codigo}`);
       cli.ultimaPartidaCreada = cli.codigo;
       iu.mostrarListaDePartidas();
@@ -43,6 +64,7 @@ function ClienteWS() {
 
     this.socket.on("unidoAPartida", function (datos) {
       let codigo = datos.codigoPartida;
+      console.log(datos);
       cli.codigo = codigo;
       let nick = datos.nick;
       if (!datos.seHaUnido) {
@@ -57,10 +79,18 @@ function ClienteWS() {
       $.cookie("codigoP", codigo);
     });
 
+    this.socket.on("aDesplegar", function (datos) {
+      console.log("ha pasado a fase de despliegue");
+      //TODO Mostrar despliegue
+      iu.mostrarModal(
+        "¡A colocar barcos!, elige un barco y colócalo en el tablero"
+      );
+    });
+
     this.socket.on("aJugar", function (datos) {
       console.log("ha iniciado una partida en la que estaba unido");
       iu.mostrarPartidaUnido(datos["codigo"]);
-      iu.mostrarModal("¡A Jugar!, La partida ha comenzado");
+      iu.mostrarModal("¡A jugar!, La partida ha comenzado");
     });
 
     this.socket.on("actualizarListaPartidas", function (lista) {
@@ -68,6 +98,16 @@ function ClienteWS() {
         console.log("Actualizar lista partidas");
         iu.mostrarListaDePartidas();
       }
+    });
+
+    this.socket.on("barcoColocado", function (datos) {
+      let seHaColocado = datos.seHaColocado;
+      console.log(datos);
+    });
+
+    this.socket.on("barcoDesplegadosCallback", function (datos) {
+      let seHaDesplegado = datos.seHaDesplegado;
+      console.log(datos);
     });
   };
 }

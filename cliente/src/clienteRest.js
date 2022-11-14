@@ -38,8 +38,8 @@ function ClienteRest() {
         return;
       }
       console.log(`El usuario ${data.nick} se ha eliminado`);
-      //   ws.nick = data.nick;
-      $.cookie("nick", data.nick);
+      $.removeCookie("nick");
+      $.removeCookie("codigoP");
       //iu.mostrarHome(data);
     });
   };

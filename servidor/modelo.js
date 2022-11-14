@@ -32,7 +32,8 @@ function Juego() {
   };
 
   this.finalizarJuego = function (nick, codigo) {
-    let partida = this.partidas[codigo];
+    let partida = this.obtenerPartida(codigo);
+    if (!partida) return false;
     if (partida.esOwnerDe(nick)) {
       return this.eliminarPartida(codigo);
     } else if (partida.esJugadoPor(nick)) {
@@ -160,10 +161,12 @@ function Jugador(usuario, partida) {
   };
 
   this.barcosDesplegados = () => {
-    if (this.estaDesplegado) {
+    if (this.estaDesplegado()) {
       this.despliegueListo = true;
       this.partida.comprobarFase();
+      return true;
     }
+    return false;
   };
 
   this.estaDesplegado = () => {
@@ -287,17 +290,17 @@ function Partida(codigo, usuario) {
     }
   };
 
-  this.esInicial = () => this.fase == faseInicial;
-  this.esDesplegando = () => this.fase == faseDesplegando;
-  this.esJugando = () => this.fase == faseJugando;
-  this.esFinal = () => this.fase == faseFinal;
+  this.esInicial = () => this.fase === faseInicial;
+  this.esDesplegando = () => this.fase === faseDesplegando;
+  this.esJugando = () => this.fase === faseJugando;
+  this.esFinal = () => this.fase === faseFinal;
 
   this.esOwnerDe = function (nick) {
-    return this.owner.nick == nick;
+    return this.owner.nick === nick;
   };
 
   this.esJugadoPor = function (nick) {
-    return this.jugadores.some((j) => j.nick == nick);
+    return this.jugadores.some((j) => j.nick === nick);
   };
 
   this.otroTurno = () => (this.turno + 1) % this.jugadores.length;
