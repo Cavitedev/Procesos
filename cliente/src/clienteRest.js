@@ -57,7 +57,7 @@ function ClienteRest() {
       console.log(`El usuario ${nick} ha creado la partida ${data.partida}`);
       cli.ultimaPartidaCreada = data.partida;
       iu.mostrarListaDePartidas();
-      iu.mostrarCodigo(data.partida);
+      iu.mostrarPartidaUnido(data.partida);
       $.cookie("nick", nick);
       $.cookie("codigoP", data.partida);
       //iu.mostrarHome(data);
@@ -74,7 +74,7 @@ function ClienteRest() {
         return;
       }
       console.log(`El usuario ${nick} se ha unido a la partida ${codigo}`);
-      iu.mostrarCodigo(data.partida);
+      iu.mostrarPartidaUnido(data.partida);
       $.cookie("nick", nick);
       $.cookie("codigoP", codigo);
       //iu.mostrar                  Home(data);

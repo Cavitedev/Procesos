@@ -47,6 +47,11 @@ function ServidorWS() {
           cli.enviarATodosEnPartida(io, codigo, "aJugar", { codigo: codigo });
         }
       });
+
+      socket.on("salirPartida", function (nick, codigo) {
+        juego.finalizarJuegosDe(nick, codigo);
+        socket.leave(codigo);
+      });
     });
   };
 }

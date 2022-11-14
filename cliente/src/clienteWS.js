@@ -11,6 +11,11 @@ function ClienteWS() {
     this.socket.emit("unirAPartida", nick, codigo);
   };
 
+  this.salirPartida = function (nick, codigo) {
+    this.socket.emit("salirPartida", nick, codigo);
+    iu.mostrarHome();
+  };
+
   //colocarBarco
   //barcosDesplegados
   //disparar
@@ -29,7 +34,7 @@ function ClienteWS() {
       console.log(`El usuario ha creado la partida ${cli.codigo}`);
       cli.ultimaPartidaCreada = cli.codigo;
       iu.mostrarListaDePartidas();
-      iu.mostrarCodigo(cli.codigo);
+      iu.mostrarPartidaUnido(cli.codigo);
     });
 
     this.socket.on("unidoAPartida", function (datos) {
@@ -43,14 +48,14 @@ function ClienteWS() {
       }
       console.log(`El usuario ${nick} se ha unido a la partida ${codigo}`);
       iu.mostrarListaDePartidas();
-      iu.mostrarCodigo(codigo);
+      iu.mostrarPartidaUnido(codigo);
       $.cookie("nick", nick);
       $.cookie("codigoP", codigo);
     });
 
     this.socket.on("aJugar", function (datos) {
       console.log("ha iniciado una partida en la que estaba unido");
-      iu.mostrarCodigo(datos["codigo"]);
+      iu.mostrarPartidaUnido(datos["codigo"]);
     });
 
     this.socket.on("actualizarListaPartidas", function (lista) {

@@ -12,7 +12,7 @@ function ControlWeb() {
     this.mostrarHome();
     partida = $.cookie("codigoP");
     if (partida) {
-      this.mostrarCodigo(partida);
+      this.mostrarPartidaUnido(partida);
     }
   };
   this.mostrarAgregarUsuario = function () {
@@ -57,16 +57,17 @@ function ControlWeb() {
       "<h2>Bienvenido " +
       $.cookie("nick") +
       "</h2>" +
-      "<div id='codigo'" +
-      "</div>" +
-      "</div>";
+      "<div id='partida'>" +
+      "<div id='codigo'></div>" +
+      "<div id='SP'></div>";
+    "</div>" + "</div>";
     $("#mH").append(cadena);
     this.mostrarCrearPartida();
     this.mostrarListaDePartidas();
 
     var cadenaCerrarSesion =
       "<button id='btnLO' class='btn btn-primary mb-2 mr-sm-2'>Cerrar Sesión</button>";
-    $("#logOut").append(cadenaCerrarSesion);
+    $("#logOut").html(cadenaCerrarSesion);
 
     $("#btnLO").on("click", function (e) {
       rest.eliminarUsuario($.cookie("nick"));
@@ -93,14 +94,33 @@ function ControlWeb() {
     });
   };
 
-  this.mostrarCodigo = function (codigo) {
+  this.mostrarPartidaUnido = (codigo) => {
     $("#mCP").remove();
     $("#cP").remove();
+    this.mostrarCodigo(codigo);
+    this.mostrarBotonSalirPartida(codigo);
+  };
+
+  this.mostrarCodigo = function (codigo) {
     if (codigo) {
       var cadena =
         "<div id='cP'><p> Código de la partida: " + codigo + "</p></div>";
       $("#codigo").append(cadena);
     }
+  };
+
+  this.mostrarBotonSalirPartida = function (codigo) {
+    var cadena =
+      "<button  id='btnSP' class='btn btn-warning btn-labeled mb-2 mr-sm-2'>Salir Partida</button> ";
+
+    $("#SP").append(cadena);
+
+    $("#btnSP").on("click", function (e) {
+      cws.salirPartida($.cookie("nick"), codigo);
+
+      //Salir partida
+      console.log("Salir partida");
+    });
   };
 
   this.mostrarListaDePartidas = function () {

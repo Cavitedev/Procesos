@@ -27,22 +27,31 @@ function Juego() {
 
   this.finalizarJuegosDe = function (nick) {
     for (let codigoPartida in this.partidas) {
-      let partida = this.partidas[codigoPartida];
-      if (partida.esOwnerDe(nick)) {
-        this.eliminarPartida(codigoPartida);
-      } else if (partida.esJugadoPor(nick)) {
-        if (partida.fase == "inicial") {
-          partida.eliminarJugador(nick);
-          console.log(
-            `El jugador "${nick}" abandona la partida ${partida.codigo}`
-          );
-        }
+      this.finalizarJuego(nick, codigoPartida);
+    }
+  };
+
+  this.finalizarJuego = function (nick, codigo) {
+    let partida = this.partidas[codigo];
+    if (partida.esOwnerDe(nick)) {
+      return this.eliminarPartida(codigo);
+    } else if (partida.esJugadoPor(nick)) {
+      if (partida.fase == "inicial") {
+        return partida.eliminarJugador(nick);
       }
     }
   };
 
   this.eliminarPartida = function (codigo) {
-    delete this.partidas[codigo];
+    let existiaUsuario = this.partidas[codigo] != null;
+    let eliminacionExitosa = delete this.partidas[codigo];
+    let haSidoEliminado = eliminacionExitosa && existiaUsuario;
+    console.log(
+      haSidoEliminado
+        ? `Eliminado el juego ${codigo}`
+        : `no se pudo eliminar el juego ${codigo}`
+    );
+    return haSidoEliminado;
   };
 
   this.crearPartidaUsuario = function (usuario) {
@@ -240,7 +249,11 @@ function Partida(codigo, usuario) {
     let idx = this.jugadores.findIndex((p) => p.nick() == nick);
     if (idx != -1) {
       this.jugadores.splice(idx, 1);
+      console.log(`El jugador "${nick}" abandona la partida ${this.codigo}`);
+      return true;
     }
+    console.log(`El jugador "${nick}" no está en la partida ${this.codigo}`);
+    return false;
   };
 
   this.estaDisponible = function () {
