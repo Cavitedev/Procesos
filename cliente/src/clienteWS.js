@@ -56,6 +56,7 @@ function ClienteWS() {
     this.socket.on("aJugar", function (datos) {
       console.log("ha iniciado una partida en la que estaba unido");
       iu.mostrarPartidaUnido(datos["codigo"]);
+      iu.mostrarModal("¡A Jugar!, La partida ha comenzado");
     });
 
     this.socket.on("actualizarListaPartidas", function (lista) {
