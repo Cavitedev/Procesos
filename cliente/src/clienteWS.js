@@ -13,7 +13,6 @@ function ClienteWS() {
 
   this.salirPartida = function (nick, codigo) {
     this.socket.emit("salirPartida", nick, codigo);
-    iu.mostrarHome();
   };
 
   //colocarBarco
@@ -35,6 +34,11 @@ function ClienteWS() {
       cli.ultimaPartidaCreada = cli.codigo;
       iu.mostrarListaDePartidas();
       iu.mostrarPartidaUnido(cli.codigo);
+    });
+
+    this.socket.on("partidaEliminada", function (data) {
+      cli.codigo = undefined;
+      iu.mostrarHome();
     });
 
     this.socket.on("unidoAPartida", function (datos) {

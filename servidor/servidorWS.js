@@ -49,8 +49,9 @@ function ServidorWS() {
       });
 
       socket.on("salirPartida", function (nick, codigo) {
-        juego.finalizarJuegosDe(nick, codigo);
+        juego.finalizarJuego(nick, codigo);
         socket.leave(codigo);
+        cli.enviarAlRemitente(socket, "partidaEliminada", {});
       });
     });
   };
