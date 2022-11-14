@@ -17,6 +17,7 @@ class Jugador{
 
 class Fase{}
 class Inicial{}
+class Desplegando{}
 class Jugando{}
 class Final{}
 class Barco{
@@ -38,13 +39,14 @@ class Agua{}
 
 
 Inicial -up-|> Fase
+Desplegando -up-|> Fase
 Jugando -up-|> Fase
 Final -up-|> Fase
 
 Agua -up-|> ElementoCelda
 CeldaBarco -up-|> ElementoCelda
 
-Juego --> "1..* usuarios" Usuario
+Juego -up-> "1..* usuarios" Usuario
 Juego -->"0..* +partidas" Partida
 Partida -right-"2" Jugador
 Partida --> Fase

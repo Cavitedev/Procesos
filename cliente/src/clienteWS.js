@@ -11,6 +11,10 @@ function ClienteWS() {
     this.socket.emit("unirAPartida", nick, codigo);
   };
 
+  //colocarBarco
+  //barcosDesplegados
+  //disparar
+
   //Gestionar Peticiones
   this.servidorWS = function () {
     let cli = this;
