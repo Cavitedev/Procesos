@@ -29,10 +29,7 @@ function Juego() {
     for (let codigoPartida in this.partidas) {
       let partida = this.partidas[codigoPartida];
       if (partida.esOwnerDe(nick)) {
-        partida.fase = "final";
-        console.log(
-          `La partida ${partida.codigo} pasa a finalizada porque el propietario ${nick} dejó el juego`
-        );
+        this.eliminarPartida(codigoPartida);
       } else if (partida.esJugadoPor(nick)) {
         if (partida.fase == "inicial") {
           partida.eliminarJugador(nick);
@@ -42,6 +39,10 @@ function Juego() {
         }
       }
     }
+  };
+
+  this.eliminarPartida = function (codigo) {
+    delete this.partidas[codigo];
   };
 
   this.crearPartidaUsuario = function (usuario) {
