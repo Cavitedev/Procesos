@@ -127,8 +127,12 @@ function ControlWeb() {
     });
   };
 
-  this.mostrarListaDePartidas = function () {
+  this.limpiarListaDePartidas = function () {
     $("#mLP").remove();
+  };
+
+  this.mostrarListaDePartidas = function () {
+    this.limpiarListaDePartidas();
     var cadena =
       "<div class='col' id='mLP'>" +
       "<button  id='btnRP' class='btn btn-info btn-labeled mb-2 mr-sm-2'><span class='btn-label'><i class='fa fa-refresh'></i></span> Refrescar</button> " +

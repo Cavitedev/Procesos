@@ -64,6 +64,7 @@ function ClienteWS() {
       }
       cli.codigo = data["partida"];
       $.cookie("codigoP", cli.codigo);
+      iu.limpiarListaDePartidas();
 
       console.log(`El usuario ha creado la partida ${cli.codigo}`);
       cli.ultimaPartidaCreada = cli.codigo;
@@ -117,13 +118,14 @@ function ClienteWS() {
         return;
       }
       console.log(`El usuario ${nick} se ha unido a la partida ${codigo}`);
-      iu.mostrarListaDePartidas();
+      iu.limpiarListaDePartidas();
       iu.mostrarPartidaUnido(codigo);
       $.cookie("nick", nick);
       $.cookie("codigoP", codigo);
     });
 
     this.socket.on("aDesplegar", function (datos) {
+      iu.limpiarListaDePartidas();
       console.log("ha pasado a fase de despliegue");
       //TODO Mostrar despliegue
       iu.mostrarModal(
