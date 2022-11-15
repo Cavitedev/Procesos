@@ -18,7 +18,7 @@ function ClienteWS() {
     this.socket.emit(
       "colocarBarco",
       $.cookie("nick"),
-      $.cookie("codigoP"),
+      parseInt($.cookie("codigoP")),
       barco,
       x,
       y,
@@ -30,7 +30,7 @@ function ClienteWS() {
     this.socket.emit(
       "barcosDesplegados",
       $.cookie("nick"),
-      $.cookie("codigoP")
+      parseInt($.cookie("codigoP"))
     );
   };
 
@@ -59,6 +59,7 @@ function ClienteWS() {
 
     this.socket.on("partidaEliminada", function (data) {
       cli.codigo = undefined;
+      $.removeCookie("codigoP");
       iu.mostrarHome();
     });
 
