@@ -12,7 +12,14 @@ function Juego() {
     return this.usuarios[nick];
   };
   this.eliminarUsuario = function (nick) {
-    this.finalizarJuegosDe(nick);
+    let juegosFinalizados = this.finalizarJuegosDe(nick);
+
+    if (juegosFinalizados.some((j) => !j.datosJuego.eliminado)) {
+      console.log(
+        `No se puede eliminar el usuario ${nick} porque tiene partidas en curso`
+      );
+      return false;
+    }
 
     let existiaUsuario = this.usuarios[nick] != null;
     let eliminacionExitosa = delete this.usuarios[nick];
@@ -22,25 +29,46 @@ function Juego() {
         ? `Eliminado al usuario ${nick}`
         : `no se pudo eliminar a ${nick}`
     );
-    return haSidoEliminado;
+    return {
+      haSidoEliminado: haSidoEliminado,
+      juegosFinalizados: juegosFinalizados,
+    };
   };
 
   this.finalizarJuegosDe = function (nick) {
+    let salida = [];
     for (let codigoPartida in this.partidas) {
-      this.finalizarJuego(nick, codigoPartida);
+      let datoJuego = this.finalizarJuego(nick, codigoPartida);
+      salida.push({
+        codigo: codigoPartida,
+        datosJuego: datoJuego,
+      });
     }
+    return salida;
   };
 
   this.finalizarJuego = function (nick, codigo) {
     let partida = this.obtenerPartida(codigo);
+    let eliminado;
+    let usuariosExpulsados = [];
+
     if (!partida) return false;
     if (partida.esOwnerDe(nick)) {
-      return this.eliminarPartida(codigo);
+      usuariosExpulsados.push(partida.obtenerJugadoresNoPropietaros());
+      eliminado = this.eliminarPartida(codigo);
     } else if (partida.esJugadoPor(nick)) {
       if (partida.fase == "inicial") {
-        return partida.eliminarJugador(nick);
+        // Es imposible con 2 jugadores, pero lo tengo en cuenta aún así
+        eliminado = partida.eliminarJugador(nick);
+      } else {
+        usuariosExpulsados.push(partida.obtenerJugadoresNoPropietaros());
+        eliminado = this.eliminarPartida(codigo);
       }
     }
+    return {
+      eliminado: eliminado,
+      usuariosExpulsados: usuariosExpulsados,
+    };
   };
 
   this.eliminarPartida = function (codigo) {
@@ -248,11 +276,17 @@ function Partida(codigo, usuario) {
     }
   };
 
+  this.obtenerJugadoresNoPropietaros = function (nick) {
+    return this.jugadores.filter((p) => p.nick() != nick);
+  };
+
   this.eliminarJugador = function (nick) {
     let idx = this.jugadores.findIndex((p) => p.nick() == nick);
     if (idx != -1) {
       this.jugadores.splice(idx, 1);
       console.log(`El jugador "${nick}" abandona la partida ${this.codigo}`);
+      this.fase = faseInicial;
+      this.turno = 0;
       return true;
     }
     console.log(`El jugador "${nick}" no está en la partida ${this.codigo}`);

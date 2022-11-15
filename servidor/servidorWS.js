@@ -55,10 +55,38 @@ function ServidorWS() {
         }
       });
 
+      socket.on("eliminarUsuario", function (nick) {
+        let datosEliminacion = juego.eliminarUsuario(nick);
+
+        if (datosEliminacion.juegosFinalizados) {
+          for (partidaEliminada of datosEliminacion.juegosFinalizados) {
+            socket.leave(partidaEliminada.codigo);
+            cli.enviarATodosEnPartida(
+              io,
+              partidaEliminada.codigo.toString(),
+              "partidaEliminada",
+              {
+                haSidoEliminado: partidaEliminada.datosJuego.eliminado,
+                codigo: partidaEliminada.codigo,
+                usuarioEliminado: nick,
+              }
+            );
+          }
+        }
+
+        cli.enviarAlRemitente(socket, "usuarioEliminado", {
+          haSidoEliminado: datosEliminacion.haSidoEliminado,
+          nick: nick,
+        });
+      });
+
       socket.on("salirPartida", function (nick, codigo) {
-        juego.finalizarJuego(nick, codigo);
+        let datosJuego = juego.finalizarJuego(nick, codigo);
         socket.leave(codigo);
-        cli.enviarAlRemitente(socket, "partidaEliminada", {});
+        cli.enviarATodosEnPartida(io, codigo.toString(), "partidaEliminada", {
+          haSidoEliminado: datosJuego.eliminado,
+          codigo: codigo,
+        });
       });
 
       socket.on(
@@ -102,7 +130,7 @@ function ServidorWS() {
 
         // False, no ha disparado, string estado de la celda tras el disparo
         cli.enviarAlRemitente(socket, "resultadoDisparo", {
-          datoDisparo: haDisparado,
+          datoDisparo: datoDisparo,
         });
       });
     });

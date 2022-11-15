@@ -14,6 +14,10 @@ function ClienteWS() {
     this.socket.emit("salirPartida", nick, codigo);
   };
 
+  this.eliminarUsuario = function (nick) {
+    this.socket.emit("eliminarUsuario", nick);
+  };
+
   this.colocarBarco = function (barco, x, y, orientacion = "horizontal") {
     this.socket.emit(
       "colocarBarco",
@@ -67,10 +71,39 @@ function ClienteWS() {
       iu.mostrarPartidaUnido(cli.codigo);
     });
 
-    this.socket.on("partidaEliminada", function (data) {
-      cli.codigo = undefined;
+    this.socket.on("usuarioEliminado", function (data) {
+      if (!data.haSidoEliminado) {
+        console.log(`El usuario ${data.nick} no existía o no se pudo eliminar`);
+        return;
+      }
+      console.log(`El usuario ${data.nick} se ha eliminado`);
+      $.removeCookie("nick");
       $.removeCookie("codigoP");
-      iu.mostrarHome();
+      iu.limpiarPantalla();
+      iu.mostrarAgregarUsuario();
+    });
+
+    this.socket.on("partidaEliminada", function (data) {
+      if (!data.haSidoEliminado) {
+        console.log(
+          `La partida ${data.codigo} no pudo ser eliminada cuando se intentó borrar`
+        );
+        return;
+      }
+
+      if (data.usuarioEliminado === $.cookie("nick")) {
+        if ($.cookie("codigoP")) {
+          $.removeCookie("codigoP");
+          iu.limpiarPantalla();
+          iu.mostrarHome();
+        }
+        return;
+      }
+      if ($.cookie("codigoP") === data.codigo.toString()) {
+        $.removeCookie("codigoP");
+        iu.limpiarPantalla();
+        iu.mostrarHome();
+      }
     });
 
     this.socket.on("unidoAPartida", function (datos) {

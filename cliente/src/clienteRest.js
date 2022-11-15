@@ -24,27 +24,11 @@ function ClienteRest() {
     var cli = this;
     $.getJSON("/leerUsuario/" + nick, function (data) {
       if (data.nick == -1) {
+        iu.limpiarPantalla();
         iu.mostrarAgregarUsuario();
         return;
       }
       iu.recuperarSesionCallback();
-    });
-  };
-
-  this.eliminarUsuario = function (nick) {
-    var cli = this;
-    $.getJSON("/eliminarUsuario/" + nick, function (data) {
-      console.log(data);
-      if (!data.eliminado) {
-        console.log(`El usuario ${data.nick} no existía o no se pudo eliminar`);
-        //iu.mostrarModal("El nick ya está en uso");
-        //iu.mostrarAgregarJugador();
-        return;
-      }
-      console.log(`El usuario ${data.nick} se ha eliminado`);
-      $.removeCookie("nick");
-      $.removeCookie("codigoP");
-      //iu.mostrarHome(data);
     });
   };
 

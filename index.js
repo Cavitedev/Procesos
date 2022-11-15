@@ -44,14 +44,6 @@ app.get("/agregarUsuario/:nick", (req, res) => {
   res.send(output);
 });
 
-app.get("/eliminarUsuario/:nick", (req, res) => {
-  let nick = req.params.nick;
-
-  let haSidoEliminado = juego.eliminarUsuario(nick);
-  let output = { eliminado: haSidoEliminado };
-  res.send(output);
-});
-
 app.get("/crearPartida/:nick", (req, res) => {
   let nick = req.params.nick;
   let codigoPartida = juego.crearPartidaNick(nick);

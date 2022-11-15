@@ -2,6 +2,7 @@ function ControlWeb() {
   this.recuperarSesion = function () {
     usuario = $.cookie("nick");
     if (!usuario) {
+      this.limpiarPantalla();
       this.mostrarAgregarUsuario();
       return;
     }
@@ -69,11 +70,7 @@ function ControlWeb() {
     $("#logOut").html(cadenaCerrarSesion);
 
     $("#btnLO").on("click", function (e) {
-      rest.eliminarUsuario($.cookie("nick"));
-      $.cookie("nick", null);
-      $.cookie("codigoP", null);
-      cli.limpiarPantalla();
-      cli.mostrarAgregarUsuario();
+      cws.eliminarUsuario($.cookie("nick"));
     });
   };
 
@@ -125,7 +122,6 @@ function ControlWeb() {
 
     $("#btnSP").on("click", function (e) {
       cws.salirPartida($.cookie("nick"), codigo);
-
       //Salir partida
       console.log("Salir partida");
     });
