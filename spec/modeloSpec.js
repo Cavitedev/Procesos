@@ -256,6 +256,17 @@ describe("El juego", function () {
       expect(tablero2.celdas[1][1].estado()).toEqual("hundido");
     });
 
+    it("Jugador no puede golpear dos veces una celda de barco", () => {
+      jugador1.disparar(1, 1);
+      jugador2.disparar(1, 1);
+      let disparo = jugador1.disparar(1, 1);
+      expect(disparo.haDisparado).toEqual(false);
+      expect(disparo.estado).toEqual("Este barco ya fue hundido");
+      expect(disparo.turno).toEqual(nick1);
+      expect(partida.turno).toEqual(0);
+      expect(tablero2.celdas[1][1].estado()).toEqual("hundido");
+    });
+
     it("Jugador con turno dispara a un barco de dos celdas y lo hunde", () => {
       let disparo = jugador1.disparar(2, 3);
       expect(disparo.haDisparado).toEqual(true);

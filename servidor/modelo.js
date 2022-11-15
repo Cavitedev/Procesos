@@ -340,14 +340,15 @@ function Partida(codigo, usuario) {
 
     this.comprobarFase();
     let haDisparado = false;
-    if (estadoDisparo) {
+
+    if (estadoDisparo.cambiarTurno) {
       this.cambiarTurno();
-      haDisparado = estadoDisparo;
+      haDisparado = true;
     }
 
     return {
-      haDisparado: true,
-      estado: estadoDisparo,
+      haDisparado: haDisparado,
+      estado: estadoDisparo.estado,
       turno: this.jugadorTurnoActual().nick(),
     };
   };
@@ -357,7 +358,6 @@ function Barco(tamano) {
   this.tamano = tamano;
   this.vida = tamano;
   this.desplegado = false;
-  this.recibirDisparo = () => {};
 
   this.hundido = () => this.vida == 0;
 }
@@ -368,14 +368,20 @@ function CeldaBarco(barco) {
   this.estado = "intacto";
 
   this.recibirDisparo = () => {
-    if (this.golpeado) return "Este barco ya fue golpeado";
+    if (this.golpeado)
+      return {
+        estado:
+          this.barco.vida > 0
+            ? "Esta celda del barco ya fue golpeada"
+            : "Este barco ya fue hundido",
+        cambiarTurno: false,
+      };
     this.barco.vida -= 1;
     this.golpeado = true;
-    let vidaTexto =
-      this.barco.vida == 0
-        ? "Barco hundido"
-        : ` le queda ${this.barco.vida} celdas antes de que se hunda`;
-    return `Barco de tamaño ${this.barco.tamano} golpeado, ${vidaTexto}`;
+    return {
+      estado: this.estado(),
+      cambiarTurno: true,
+    };
   };
 
   this.estado = () => {
@@ -399,7 +405,7 @@ function CeldaBarco(barco) {
 
 function Agua() {
   this.recibirDisparo = () => {
-    return "agua";
+    return { estado: this.estado(), cambiarTurno: true };
   };
 
   this.estado = () => "agua";
@@ -460,8 +466,7 @@ function Tablero() {
 
   this.recibirDisparo = (x, y) => {
     let celda = this.obtenerCelda(x, y);
-    celda.recibirDisparo();
-    let estadoCelda = celda.estado();
+    let estadoCelda = celda.recibirDisparo();
     return estadoCelda;
   };
 
