@@ -94,6 +94,8 @@ function ControlWeb() {
   };
 
   this.mostrarPartidaUnido = (codigo) => {
+    if (!codigo || codigo === "null") return;
+
     $("#mCP").remove();
     $("#cP").remove();
     $("#partida").html("");

@@ -22,7 +22,11 @@ function ClienteRest() {
 
   this.agregarUsuarioDesdeCookie = function (nick) {
     var cli = this;
-    $.getJSON("/agregarUsuario/" + nick, function (data) {
+    $.getJSON("/leerUsuario/" + nick, function (data) {
+      if (data.nick == -1) {
+        iu.mostrarAgregarUsuario();
+        return;
+      }
       iu.recuperarSesionCallback();
     });
   };
