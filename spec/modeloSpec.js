@@ -4,12 +4,15 @@ Juego = Modelo.Juego;
 describe("El juego", function () {
   var juego;
   var usr1, usr2, usr3;
+  const nick1 = "pepe";
+  const nick2 = "luis";
+  const nick3 = "pepa";
 
   beforeEach(function () {
     juego = new Juego();
-    usr1 = juego.agregarUsuario("pepe");
-    usr2 = juego.agregarUsuario("luis");
-    usr3 = juego.agregarUsuario("pepa");
+    usr1 = juego.agregarUsuario(nick1);
+    usr2 = juego.agregarUsuario(nick2);
+    usr3 = juego.agregarUsuario(nick3);
   });
 
   describe("inicialmente", function () {
@@ -228,35 +231,45 @@ describe("El juego", function () {
     });
 
     it("Jugador sin turno dispara no cambia nada", () => {
-      let haDisparado = jugador2.disparar(3, 3);
-      expect(haDisparado).toEqual(false);
+      let disparo = jugador2.disparar(3, 3);
+      expect(disparo.haDisparado).toEqual(false);
+      expect(disparo.estado).toEqual("Fuera de turno");
+      expect(disparo.turno).toEqual(nick1);
       expect(partida.turno).toEqual(0);
     });
 
     it("Jugador con turno dispara al agua", () => {
-      let haDisparado = jugador1.disparar(0, 0);
-      expect(haDisparado).toEqual(true);
+      let disparo = jugador1.disparar(0, 0);
+      expect(disparo.haDisparado).toEqual(true);
+      expect(disparo.estado).toEqual("agua");
+      expect(disparo.turno).toEqual(nick2);
       expect(partida.turno).toEqual(1);
       expect(tablero2.celdas[0][0].estado()).toEqual("agua");
     });
 
     it("Jugador con turno dispara a un barco de una celda y lo hunde", () => {
-      let haDisparado = jugador1.disparar(1, 1);
-      expect(haDisparado).toEqual(true);
+      let disparo = jugador1.disparar(1, 1);
+      expect(disparo.haDisparado).toEqual(true);
+      expect(disparo.estado).toEqual("hundido");
+      expect(disparo.turno).toEqual(nick2);
       expect(partida.turno).toEqual(1);
       expect(tablero2.celdas[1][1].estado()).toEqual("hundido");
     });
 
     it("Jugador con turno dispara a un barco de dos celdas y lo hunde", () => {
-      let haDisparado = jugador1.disparar(2, 3);
-      expect(haDisparado).toEqual(true);
+      let disparo = jugador1.disparar(2, 3);
+      expect(disparo.haDisparado).toEqual(true);
+      expect(disparo.estado).toEqual("tocado");
+      expect(disparo.turno).toEqual(nick2);
       expect(partida.turno).toEqual(1);
       expect(tablero2.celdas[2][3].estado()).toEqual("tocado");
 
       jugador2.disparar(0, 0);
 
-      haDisparado = jugador1.disparar(3, 3);
-      expect(haDisparado).toEqual(true);
+      disparo = jugador1.disparar(3, 3);
+      expect(disparo.haDisparado).toEqual(true);
+      expect(disparo.estado).toEqual("hundido");
+      expect(disparo.turno).toEqual(nick2);
       expect(partida.turno).toEqual(1);
       expect(tablero2.celdas[2][3].estado()).toEqual("hundido");
       expect(tablero2.celdas[3][3].estado()).toEqual("hundido");
@@ -271,8 +284,10 @@ describe("El juego", function () {
       jugador2.disparar(0, 2);
       jugador1.disparar(6, 4);
       expect(partida.esFinal()).toEqual(true);
-      let haDisparado = jugador2.disparar(0, 3);
-      expect(haDisparado).toEqual(false);
+      let disparo = jugador2.disparar(0, 3);
+      expect(disparo.haDisparado).toEqual(false);
+      expect(disparo.estado).toEqual("No está en fase jugando");
+      expect(disparo.turno).toEqual(null);
     });
   });
 });

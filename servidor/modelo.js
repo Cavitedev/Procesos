@@ -315,24 +315,41 @@ function Partida(codigo, usuario) {
   this.jugadorSinTurnoActual = () => this.jugadores[this.otroTurno()];
 
   this.disparar = (nick, x, y) => {
-    if (!this.esJugando()) return false;
+    if (!this.esJugando())
+      return {
+        haDisparado: false,
+        estado: "No está en fase jugando",
+        turno: null,
+      };
 
     const jugadorTurno = this.jugadorTurnoActual();
 
     if (jugadorTurno.nick() != nick) {
       console.log("No es el turno de", nick);
-      return false;
+      return {
+        haDisparado: false,
+        estado: "Fuera de turno",
+        turno: this.jugadorTurnoActual().nick(),
+      };
     }
 
     const jugadorRecibeAtaque = this.jugadorSinTurnoActual();
     const tableroAtacado = jugadorRecibeAtaque.tablero;
 
-    let haDisparado = tableroAtacado.recibirDisparo(x, y);
+    let estadoDisparo = tableroAtacado.recibirDisparo(x, y);
+
     this.comprobarFase();
-    if (haDisparado) {
+    let haDisparado = false;
+    if (estadoDisparo) {
       this.cambiarTurno();
+      haDisparado = estadoDisparo;
     }
-    return haDisparado;
+
+    return {
+      haDisparado: true,
+      estado: estadoDisparo,
+      turno: this.jugadorTurnoActual().nick(),
+    };
   };
 }
 
@@ -444,7 +461,8 @@ function Tablero() {
   this.recibirDisparo = (x, y) => {
     let celda = this.obtenerCelda(x, y);
     celda.recibirDisparo();
-    return true;
+    let estadoCelda = celda.estado();
+    return estadoCelda;
   };
 
   this.colocarBarco = (barco, x, y, orientacion = "horizontal") => {

@@ -34,6 +34,16 @@ function ClienteWS() {
     );
   };
 
+  this.disparar = function (x, y) {
+    this.socket.emit(
+      "disparar",
+      $.cookie("nick"),
+      parseInt($.cookie("codigoP")),
+      x,
+      y
+    );
+  };
+
   //colocarBarco
   //barcosDesplegados
   //disparar
@@ -108,6 +118,10 @@ function ClienteWS() {
 
     this.socket.on("barcoDesplegadosCallback", function (datos) {
       let seHaDesplegado = datos.seHaDesplegado;
+      console.log(datos);
+    });
+
+    this.socket.on("resultadoDisparo", function (datos) {
       console.log(datos);
     });
   };

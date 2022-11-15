@@ -94,6 +94,17 @@ function ServidorWS() {
           });
         }
       });
+
+      socket.on("disparar", function (nick, codigo, x, y) {
+        let partida = juego.obtenerPartida(codigo);
+        let jugador = partida.obtenerJugador(nick);
+        let datoDisparo = jugador.disparar(x, y);
+
+        // False, no ha disparado, string estado de la celda tras el disparo
+        cli.enviarAlRemitente(socket, "resultadoDisparo", {
+          datoDisparo: haDisparado,
+        });
+      });
     });
   };
 }
