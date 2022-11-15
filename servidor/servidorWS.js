@@ -41,6 +41,8 @@ function ServidorWS() {
         let seHaUnido = juego.unirAPartidaNick(codigo, nick);
         if (seHaUnido) {
           socket.join(codigo.toString());
+          let lista = juego.obtenerPartidasDisponibles();
+          cli.enviarATodos(socket, "actualizarListaPartidas", lista);
         }
         cli.enviarAlRemitente(socket, "unidoAPartida", {
           nick: nick,
