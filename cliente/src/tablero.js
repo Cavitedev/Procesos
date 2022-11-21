@@ -93,11 +93,12 @@ function Tablero(size) {
   };
 
   this.resumeReplacement = function () {
-    const shipsPlace = document.querySelector(".fleet-roster").childNodes;
+    const shipsPlace = document
+      .querySelector(".fleet-roster")
+      .querySelectorAll("li");
 
     for (var i = 0; i < shipsPlace.length; i++) {
       var shipPlace = shipsPlace[i];
-      if (shipPlace.nodeName != "LI") continue;
       shipPlace.setAttribute("class", "");
       shipPlace.placingOnGrid = true;
     }
