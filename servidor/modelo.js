@@ -177,6 +177,11 @@ function Jugador(usuario, partida) {
     this.despliegueListo = false;
     if (this.partida.fase != "desplegando") return false;
     if (indiceBarco < 0 || indiceBarco >= this.flota.length) return false;
+    if (
+      orientacion.toLowerCase() != "horizontal" &&
+      orientacion.toLowerCase() != "vertical"
+    )
+      return false;
     let barco = this.flota[indiceBarco];
 
     let haSidoColocado = this.tablero.colocarBarco(barco, x, y, orientacion);
@@ -186,6 +191,12 @@ function Jugador(usuario, partida) {
     }
     this.partida.comprobarFase();
     return haSidoColocado;
+  };
+
+  this.limpiarTablero = () => {
+    if (this.partida.fase != "desplegando") return false;
+    this.tablero.limpiarTablero();
+    return true;
   };
 
   this.barcosDesplegados = () => {
@@ -242,7 +253,7 @@ function Partida(codigo, usuario) {
     let flota = [new Barco(1), new Barco(1), new Barco(2)];
     let tablero = new Tablero();
     //Cambiar tamaño si hace falta
-    tablero.crearTablero(8);
+    tablero.crearTablero(10);
 
     jugador.flota = flota;
     jugador.tablero = tablero;
@@ -393,6 +404,7 @@ function Barco(tamano) {
   this.vida = tamano;
   this.desplegado = false;
 
+  this.nombre = () => "b" + this.tamano;
   this.hundido = () => this.vida == 0;
 }
 
@@ -483,6 +495,10 @@ function Tablero() {
         this.celdas[x][y] = new Celda(x, y);
       }
     }
+  };
+
+  this.limpiarTablero = function () {
+    this.crearTablero(10);
   };
 
   this.obtenerCelda = (x, y) => {

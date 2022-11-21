@@ -133,7 +133,7 @@ describe("El juego", function () {
     const jugadores = partida.jugadores;
     const jugador1 = jugadores[0];
 
-    const seHaColocado = jugador1.colocarBarco(2, 7, 7);
+    const seHaColocado = jugador1.colocarBarco(2, 9, 9);
 
     expect(seHaColocado).toEqual(false);
     comprobarTableroAgua(jugador1.tablero);

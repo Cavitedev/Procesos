@@ -30,6 +30,14 @@ function ClienteWS() {
     );
   };
 
+  this.limpiarTablero = function () {
+    this.socket.emit(
+      "limpiarTablero",
+      $.cookie("nick"),
+      parseInt($.cookie("codigoP"))
+    );
+  };
+
   this.barcosDesplegados = function () {
     this.socket.emit(
       "barcosDesplegados",
@@ -128,9 +136,21 @@ function ClienteWS() {
       iu.limpiarListaDePartidas();
       console.log("ha pasado a fase de despliegue");
       //TODO Mostrar despliegue
+      console.log(datos);
+      tablero.flota = datos.flota;
+      tablero.mostrar(true);
       iu.mostrarModal(
         "¡A colocar barcos!, elige un barco y colócalo en el tablero"
       );
+    });
+
+    this.socket.on("tableroLimpiado", function (datos) {
+      if (datos.haSidoLimpiado) {
+        console.log("ha limpiado el tablero");
+        tablero.limpiarGrid();
+      } else {
+        console.log("No se ha podido limpiar el tablero");
+      }
     });
 
     this.socket.on("aJugar", function (datos) {

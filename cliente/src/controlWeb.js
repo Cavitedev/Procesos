@@ -177,6 +177,7 @@ function ControlWeb() {
       });
     }
   };
+
   this.mostrarModal = function (msg) {
     $("#mM").remove();
     var cadena = "<p id='mM'>" + msg + "</p>";

@@ -39,6 +39,7 @@ function ServidorWS() {
         }
 
         let seHaUnido = juego.unirAPartidaNick(codigo, nick);
+        let jugador = partida.obtenerJugador(nick);
         if (seHaUnido) {
           socket.join(codigo.toString());
           let lista = juego.obtenerPartidasDisponibles();
@@ -52,6 +53,7 @@ function ServidorWS() {
 
         if (partida.esDesplegando()) {
           cli.enviarATodosEnPartida(io, codigo.toString(), "aDesplegar", {
+            flota: jugador.flota,
             codigo: codigo,
           });
         }
@@ -108,6 +110,20 @@ function ServidorWS() {
           // Añadir barco
         }
       );
+
+      socket.on("limpiarTablero", function (nick, codigo) {
+        let partida = juego.obtenerPartida(codigo);
+        if (!partida) {
+          console.log(`No se encontró la partida ${codigo}`);
+          return;
+        }
+        let jugador = partida.obtenerJugador(nick);
+        let haSidoLimpiado = jugador.limpiarTablero();
+
+        cli.enviarAlRemitente(socket, "tableroLimpiado", {
+          haSidoLimpiado: haSidoLimpiado,
+        });
+      });
 
       socket.on("barcosDesplegados", function (nick, codigo) {
         let partida = juego.obtenerPartida(codigo);
