@@ -74,16 +74,7 @@ function Tablero(size) {
       var y = parseInt(e.target.getAttribute("data-y"), 10);
 
       // Don't screw up the direction if the user tries to place again.
-      var successful = self.colocarBarco(
-        x,
-        y,
-        self.nombreBarco,
-        self.orientacion
-      );
-      if (successful) {
-        // Done placing this ship
-        self.endPlacing(self.nombreBarco);
-      }
+      self.colocarBarco(x, y, self.nombreBarco, self.orientacion);
     }
   };
   this.endPlacing = function (shipType) {
@@ -123,23 +114,29 @@ function Tablero(size) {
   };
   this.colocarBarco = function (x, y, nombre, orientacion) {
     //comprobar límites
-    console.log("Colocar barco: " + x + "-" + y + " " + nombre);
+    console.log("Colocando barco: " + x + "-" + y + " " + nombre);
     idBarco = parseInt(nombre);
     cws.colocarBarco(idBarco, x, y, orientacion);
 
-    if (orientacion === "Horizontal") {
-      for (var i = 0; i < this.flota[idBarco].tamano; i++) {
+    return true;
+  };
+
+  this.barcoColocado = function (barco, x, y, orientacion) {
+    if (orientacion.toLowerCase() === "horizontal") {
+      for (var i = 0; i < this.flota[barco].tamano; i++) {
         console.log("x: " + (x + i) + " y:" + y);
         this.updateCell(x + i, y, "ship", "human-player");
       }
-    } else if (orientacion === "Vertical") {
-      for (var j = 0; j < this.flota[idBarco].tamano; j++) {
+    } else if (orientacion.toLowerCase() === "vertical") {
+      for (var j = 0; j < this.flota[barco].tamano; j++) {
         console.log("x: " + x + " y:" + (y + j));
         this.updateCell(x, y + j, "ship", "human-player");
       }
     }
-    return true;
+
+    self.endPlacing(barco);
   };
+
   this.shootListener = function (e) {
     var x = parseInt(e.target.getAttribute("data-x"), 10);
     var y = parseInt(e.target.getAttribute("data-y"), 10);

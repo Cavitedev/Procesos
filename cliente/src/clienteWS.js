@@ -167,7 +167,10 @@ function ClienteWS() {
     });
 
     this.socket.on("barcoColocado", function (datos) {
-      let seHaColocado = datos.seHaColocado;
+      let haSidoColocado = datos.haSidoColocado;
+      if (haSidoColocado) {
+        tablero.barcoColocado(datos.barco, datos.x, datos.y, datos.orientacion);
+      }
       console.log(datos);
     });
 

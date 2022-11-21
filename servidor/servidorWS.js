@@ -106,6 +106,10 @@ function ServidorWS() {
 
           cli.enviarAlRemitente(socket, "barcoColocado", {
             haSidoColocado: haSidoColocado,
+            barco: barco,
+            x: x,
+            y: y,
+            orientacion: orientacion,
           });
           // Añadir barco
         }
