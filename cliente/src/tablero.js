@@ -27,6 +27,14 @@ function Tablero(size) {
       false
     );
 
+    const botondesplegarBarcos = document.querySelector("#desplegarBarcos");
+    botondesplegarBarcos.self = this;
+    botondesplegarBarcos.addEventListener(
+      "click",
+      this.desplegarListener,
+      false
+    );
+
     var humanCells = document.querySelector(".human-player").childNodes;
     for (var k = 0; k < humanCells.length; k++) {
       humanCells[k].self = this;
@@ -64,6 +72,10 @@ function Tablero(size) {
 
   this.limpiarTablero = () => {
     cws.limpiarTablero();
+  };
+
+  this.desplegarListener = () => {
+    cws.barcosDesplegados();
   };
 
   this.placementListener = function (e) {

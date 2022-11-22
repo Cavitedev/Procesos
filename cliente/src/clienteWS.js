@@ -154,9 +154,15 @@ function ClienteWS() {
     });
 
     this.socket.on("aJugar", function (datos) {
+      console.log(datos);
       console.log("ha iniciado una partida en la que estaba unido");
       iu.mostrarPartidaUnido(datos["codigo"]);
-      iu.mostrarModal("¡A jugar!, La partida ha comenzado");
+      iu.mostrarModal(
+        "¡A jugar!, La partida ha comenzado\n" +
+          (datos.turno === $.cookie("nick")
+            ? "Es tu turno"
+            : "Es el turno del otro jugador")
+      );
     });
 
     this.socket.on("actualizarListaPartidas", function (lista) {
@@ -175,12 +181,26 @@ function ClienteWS() {
     });
 
     this.socket.on("barcoDesplegadosCallback", function (datos) {
-      let seHaDesplegado = datos.seHaDesplegado;
+      let haSidoDesplegado = datos.haSidoDesplegado;
       console.log(datos);
+      if (haSidoDesplegado) {
+        iu.mostrarModal("Sus barcos han sido desplegados");
+      } else {
+        iu.mostrarModal("No se han podido desplegar los barcos");
+      }
     });
 
     this.socket.on("resultadoDisparo", function (datos) {
       console.log(datos);
+      const datosDisparo = datos.datoDisparo;
+      tablero.updateCell(
+        datosDisparo.x,
+        datosDisparo.y,
+        datosDisparo.estado,
+        datosDisparo.turno === $.cookie("nick")
+          ? "human-player"
+          : "computer-player"
+      );
     });
   };
 }

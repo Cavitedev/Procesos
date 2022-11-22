@@ -133,6 +133,7 @@ function ServidorWS() {
         let partida = juego.obtenerPartida(codigo);
         let jugador = partida.obtenerJugador(nick);
         let haSidoDesplegado = jugador.barcosDesplegados();
+        let turno = partida.jugadorTurnoActual().usuario.nick;
 
         cli.enviarAlRemitente(socket, "barcoDesplegadosCallback", {
           haSidoDesplegado: haSidoDesplegado,
@@ -141,6 +142,7 @@ function ServidorWS() {
         if (partida.esJugando()) {
           cli.enviarATodosEnPartida(io, codigo.toString(), "aJugar", {
             codigo: codigo,
+            turno: turno,
           });
         }
       });
@@ -151,7 +153,7 @@ function ServidorWS() {
         let datoDisparo = jugador.disparar(x, y);
 
         // False, no ha disparado, string estado de la celda tras el disparo
-        cli.enviarAlRemitente(socket, "resultadoDisparo", {
+        cli.enviarATodosEnPartida(io, codigo.toString(), "resultadoDisparo", {
           datoDisparo: datoDisparo,
         });
       });

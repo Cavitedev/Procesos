@@ -393,6 +393,8 @@ function Partida(codigo, usuario) {
 
     return {
       haDisparado: haDisparado,
+      x: x,
+      y: y,
       estado: estadoDisparo.estado,
       turno: this.jugadorTurnoActual().nick(),
     };
