@@ -6,12 +6,13 @@ Node Navegador{
     file controlWeb as "controlWeb.js"
     file clienteWS as "clienteWS.js"
     file jquery as "jquery.js"
-
+    file tablero as "tablero.js"
 
     indexWeb ..> jquery
     indexWeb ..> clienteRest
     indexWeb ..> controlWeb
     indexWeb ..> clienteWS
+    indexWeb ..> tablero
 
 }
 Node Server{
