@@ -57,6 +57,9 @@ function ServidorWS() {
             codigo: codigo,
           });
         }
+
+        let lista = juego.obtenerPartidasDisponibles();
+        cli.enviarATodos(socket, "actualizarListaPartidas", lista);
       });
 
       socket.on("eliminarUsuario", function (nick) {
@@ -82,6 +85,9 @@ function ServidorWS() {
           haSidoEliminado: datosEliminacion.haSidoEliminado,
           nick: nick,
         });
+
+        let lista = juego.obtenerPartidasDisponibles();
+        cli.enviarATodos(socket, "actualizarListaPartidas", lista);
       });
 
       socket.on("salirPartida", function (nick, codigo) {
@@ -91,6 +97,9 @@ function ServidorWS() {
           haSidoEliminado: datosJuego.eliminado,
           codigo: codigo,
         });
+
+        let lista = juego.obtenerPartidasDisponibles();
+        cli.enviarATodos(socket, "actualizarListaPartidas", lista);
       });
 
       socket.on(
@@ -145,6 +154,9 @@ function ServidorWS() {
             turno: turno,
           });
         }
+
+        let lista = juego.obtenerPartidasDisponibles();
+        cli.enviarATodos(socket, "actualizarListaPartidas", lista);
       });
 
       socket.on("disparar", function (nick, codigo, x, y) {
