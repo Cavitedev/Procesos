@@ -39,24 +39,29 @@ function Juego() {
     let salida = [];
     for (let codigoPartida in this.partidas) {
       let datoJuego = this.finalizarJuego(nick, codigoPartida);
-      salida.push({
-        codigo: codigoPartida,
-        datosJuego: datoJuego,
-      });
+      if (datoJuego.estabaEnPartida) {
+        salida.push({
+          codigo: codigoPartida,
+          datosJuego: datoJuego,
+        });
+      }
     }
     return salida;
   };
 
   this.finalizarJuego = function (nick, codigo) {
     let partida = this.obtenerPartida(codigo);
+    let estabaEnPartida = false;
     let eliminado;
     let usuariosExpulsados = [];
 
     if (!partida) return false;
     if (partida.esOwnerDe(nick)) {
+      estabaEnPartida = true;
       usuariosExpulsados.push(partida.obtenerJugadoresNoPropietaros());
       eliminado = this.eliminarPartida(codigo);
     } else if (partida.esJugadoPor(nick)) {
+      estabaEnPartida = true;
       if (partida.fase == "inicial") {
         // Es imposible con 2 jugadores, pero lo tengo en cuenta aún así
         eliminado = partida.eliminarJugador(nick);
@@ -67,6 +72,7 @@ function Juego() {
     }
     return {
       eliminado: eliminado,
+      estabaEnPartida: estabaEnPartida,
       usuariosExpulsados: usuariosExpulsados,
     };
   };

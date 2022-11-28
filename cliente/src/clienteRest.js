@@ -77,6 +77,10 @@ function ClienteRest() {
   };
 
   this.obtenerPartidasDisponibles = function () {
+    if ($.cookie("nick") == undefined) {
+      return;
+    }
+
     var cli = this;
     $.getJSON("/obtenerPartidasDisponibles", function (data) {
       console.log(data);
