@@ -1,5 +1,6 @@
 Modelo = require("../servidor/modelo.js");
 Juego = Modelo.Juego;
+Barco = Modelo.Barco;
 
 describe("El juego", function () {
   var juego;
@@ -162,9 +163,10 @@ describe("El juego", function () {
 
   it("Tras que se unan los dos jugadores, ambos ponen sus barcos en sus tableros, el jugador 1 coloca un barco en vertical y se debe pasar a la fase jugando una vez acabe", () => {
     const partidaId = usr1.crearPartida();
+    const partida = juego.partidas[partidaId];
+    partida.cambiarFlota([new Barco(1), new Barco(1), new Barco(2)]);
     usr2.unirseAPartida(partidaId);
 
-    const partida = juego.partidas[partidaId];
     const jugadores = partida.jugadores;
     const jugador1 = jugadores[0];
     const tablero1 = jugador1.tablero;
@@ -213,6 +215,7 @@ describe("El juego", function () {
       usr2.unirseAPartida(partidaId);
 
       partida = juego.partidas[partidaId];
+      partida.cambiarFlota([new Barco(1), new Barco(1), new Barco(2)]);
       const jugadores = partida.jugadores;
       jugador1 = jugadores[0];
       tablero1 = jugador1.tablero;

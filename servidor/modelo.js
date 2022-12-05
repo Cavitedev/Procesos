@@ -247,6 +247,15 @@ function Partida(codigo, usuario) {
   const faseJugando = "jugando";
   const faseFinal = "final";
 
+  const flotaPorDefecto = [
+    new Barco(1),
+    new Barco(1),
+    new Barco(2),
+    new Barco(3),
+    new Barco(4),
+  ];
+
+  this.flota = flotaPorDefecto;
   this.codigo;
   this.fase = faseInicial;
   this.owner = usuario;
@@ -256,12 +265,12 @@ function Partida(codigo, usuario) {
   this.crearJugador = (usuario) => {
     let jugador = new Jugador(usuario, this);
     // Actualizar luego para tener todos los flota
-    let flota = [new Barco(1), new Barco(1), new Barco(2)];
+
     let tablero = new Tablero();
     //Cambiar tamaño si hace falta
     tablero.crearTablero(10);
 
-    jugador.flota = flota;
+    jugador.flota = this.flota;
     jugador.tablero = tablero;
 
     return jugador;
@@ -310,6 +319,13 @@ function Partida(codigo, usuario) {
     return false;
   };
 
+  this.cambiarFlota = function (flota) {
+    this.flota = flota;
+    for (jugador of this.jugadores) {
+      jugador.flota = flota;
+    }
+  };
+
   this.estaDisponible = function () {
     return this.jugadores.length < maxJugadores;
   };
@@ -317,8 +333,7 @@ function Partida(codigo, usuario) {
   this.quienHaGanado = () => {
     for (const jugador of this.jugadores) {
       if (jugador.estaDesplegado() && jugador.todosBarcosHundidos()) {
-        this.ganador = this.jugadorRivalDe(jugador.nick);
-        return true;
+        return this.jugadorRivalDe(jugador.nick);
       }
     }
   };
@@ -587,3 +602,4 @@ function Tablero() {
 }
 
 module.exports.Juego = Juego;
+module.exports.Barco = Barco;
