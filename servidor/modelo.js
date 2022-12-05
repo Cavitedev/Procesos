@@ -239,6 +239,15 @@ function Jugador(usuario, partida) {
   this.disparar = (x, y) => {
     return this.partida.disparar(this.nick(), x, y);
   };
+
+  this.toMap = () => {
+    return {
+      nick: this.nick(),
+      tablero: this.tablero,
+      flota: this.flota,
+      despliegueListo: this.despliegueListo,
+    }
+  }
 }
 
 function Partida(codigo, usuario) {
@@ -418,6 +427,17 @@ function Partida(codigo, usuario) {
       y: y,
       estado: estadoDisparo.estado,
       turno: this.jugadorTurnoActual().nick(),
+    };
+  };
+
+  this.toMap = () => {
+    return {
+      fase: this.fase,
+      flota: this.flota,
+      owner: this.owner.nick,
+      turno: this.turno,
+      ganador: this.ganador?.nick,
+      jugadores: this.jugadores.map((jugador) => jugador.toMap()),
     };
   };
 }
