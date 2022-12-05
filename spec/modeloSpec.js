@@ -10,7 +10,7 @@ describe("El juego", function () {
   const nick3 = "pepa";
 
   beforeEach(function () {
-    juego = new Juego();
+    juego = new Juego(false);
     usr1 = juego.agregarUsuario(nick1);
     usr2 = juego.agregarUsuario(nick2);
     usr3 = juego.agregarUsuario(nick3);

@@ -1,8 +1,7 @@
-const Cad = require("./cad.js");
+
 
 function ServidorWS() {
   //enviar peticiones
-  const cad = new Cad.Cad();
 
   this.enviarAlRemitente = function (socket, mensaje, datos) {
     socket.emit(mensaje, datos);
@@ -24,9 +23,7 @@ function ServidorWS() {
 
       socket.on("crearPartida", function (nick) {
         let codigoPartida = juego.crearPartidaNick(nick);
-        const partida = juego.partidas[codigoPartida];
-        const partidaJSON = partida.toMap();
-        cad.insertarPartida(partidaJSON, (partida) => {});
+
 
         if (codigoPartida) {
           socket.join(codigoPartida.toString());

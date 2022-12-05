@@ -1,6 +1,14 @@
-function Juego() {
+const Cad = require("./cad.js");
+
+function Juego(test) {
   this.partidas = {};
   this.usuarios = {};
+  this.cad;
+
+  if (!test) {
+    this.cad = new Cad.Cad();
+    this.cad.conectar();
+  }
 
   this.agregarUsuario = function (nick) {
     if (this.usuarios[nick]) {
@@ -106,6 +114,12 @@ function Juego() {
     }
 
     let codigoPartida = usuario.crearPartida();
+
+    const partida = this.partidas[codigoPartida];
+    const partidaJSON = partida.toMap();
+    this.cad.insertarPartida(partidaJSON, (partida) => {
+      console.log("Añadida partida a la base de dato")
+    });
     return codigoPartida;
   };
 
@@ -246,8 +260,8 @@ function Jugador(usuario, partida) {
       tablero: this.tablero,
       flota: this.flota,
       despliegueListo: this.despliegueListo,
-    }
-  }
+    };
+  };
 }
 
 function Partida(codigo, usuario) {
