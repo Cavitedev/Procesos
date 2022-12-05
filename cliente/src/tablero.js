@@ -3,8 +3,36 @@ function Tablero(size) {
   this.nombreBarco;
   this.orientacion = "Horizontal";
   this.placingOnGrid = false;
-  this.flota;
+  this.flota = [];
+
+  this.anadirCallbacksBarcos = function () {
+    var playerRoster = document
+      .querySelector(".fleet-roster")
+      .querySelectorAll("li");
+    for (var i = 0; i < playerRoster.length; i++) {
+      playerRoster[i].self = this;
+      playerRoster[i].addEventListener("click", this.rosterListener, false);
+    }
+    var computerCells = document.querySelector(".computer-player").childNodes;
+    for (var j = 0; j < computerCells.length; j++) {
+      computerCells[j].self = this;
+      computerCells[j].addEventListener("click", this.shootListener, false);
+    }
+  };
+
   this.mostrar = function (si) {
+    let listaBarcos = document.getElementById("lista-barcos");
+    let html = "";
+
+    let id = 0;
+    for (const barco of this.flota) {
+      html += `<li id=${id}>b${barco.tamano}</li>`;
+      id++;
+    }
+
+    listaBarcos.innerHTML = html;
+    this.anadirCallbacksBarcos();
+
     let x = document.getElementById("tablero");
     if (si) {
       x.style.display = "block";
@@ -42,18 +70,7 @@ function Tablero(size) {
       //humanCells[k].addEventListener('mouseover', this.placementMouseover, false);
       //humanCells[k].addEventListener('mouseout', this.placementMouseout, false);
     }
-    var playerRoster = document
-      .querySelector(".fleet-roster")
-      .querySelectorAll("li");
-    for (var i = 0; i < playerRoster.length; i++) {
-      playerRoster[i].self = this;
-      playerRoster[i].addEventListener("click", this.rosterListener, false);
-    }
-    var computerCells = document.querySelector(".computer-player").childNodes;
-    for (var j = 0; j < computerCells.length; j++) {
-      computerCells[j].self = this;
-      computerCells[j].addEventListener("click", this.shootListener, false);
-    }
+    this.anadirCallbacksBarcos();
   };
 
   this.orientacionListener = function (e) {
@@ -219,4 +236,6 @@ function Tablero(size) {
   };
   this.createGrid();
   this.mostrar(false);
+
+
 }
