@@ -5,19 +5,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch via NPM",
       "type": "node",
       "request": "launch",
-      "name": "Lanzar Index",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\index.js"
-    },
-
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Lanzar Mongo",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\servidor\\cad.js"
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start"],
+      "port": 3000
     }
   ]
 }

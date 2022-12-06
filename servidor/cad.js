@@ -22,12 +22,28 @@ function Cad() {
           client.close();
           return;
         }
+
+        cad.logs = client.db(dbName).collection("logs");
+        if (!cad.logs) {
+          console.log("No se pudo acceder a la coleccion");
+          client.close();
+          return;
+        }
       }
     );
   };
 
   this.insertarPartida = function (partida, callback) {
     insertar(this.partidas, partida, callback);
+  };
+
+  this.insertarLog = function (log, callback) {
+    const logID = Date.now();
+    const dbLog = {
+      _id: logID,
+      log: log,
+    };
+    insertar(this.logs, dbLog, callback);
   };
 
   function insertar(coleccion, elemento, callback) {

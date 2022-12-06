@@ -16,7 +16,11 @@ function Juego(test) {
       return null;
     }
     this.usuarios[nick] = new Usuario(nick, this);
-    console.log(`Nuevo usuario en el sistema: ${nick}`);
+    const log = `Nuevo usuario en el sistema: ${nick}`;
+    console.log(log);
+    this.cad?.insertarLog(log, (log) => {
+      console.log("Nuevo log insertado en la base de datos");
+    });
     return this.usuarios[nick];
   };
   this.eliminarUsuario = function (nick) {
@@ -117,8 +121,8 @@ function Juego(test) {
 
     const partida = this.partidas[codigoPartida];
     const partidaJSON = partida.toMap();
-    this.cad.insertarPartida(partidaJSON, (partida) => {
-      console.log("Añadida partida a la base de dato")
+    this.cad?.insertarPartida(partidaJSON, (partida) => {
+      console.log("Añadida partida a la base de dato");
     });
     return codigoPartida;
   };

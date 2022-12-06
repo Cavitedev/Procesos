@@ -12,7 +12,7 @@ const sWS = require("./servidor/servidorWS.js");
 
 const PORT = process.env.PORT || 3000;
 
-let juego = new modelo.Juego(true);
+let juego = new modelo.Juego(process.argv[2] === "true");
 let servidorWS = new sWS.ServidorWS();
 /*
 "/"

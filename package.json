@@ -7,7 +7,9 @@
     "doc": "docs"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "npm run start:prod",
+    "start:prod": "node index.js false",
+    "start:dev": "node index.js true",
     "test": "npx jasmine"
   },
   "repository": {
