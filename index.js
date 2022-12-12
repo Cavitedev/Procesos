@@ -7,8 +7,13 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
+const passport = require("passport");
+
 const modelo = require("./servidor/modelo.js");
 const sWS = require("./servidor/servidorWS.js");
+
+require("dotenv").config();
+const GoogleStrategy = require("passport-google-oauth").Strategy;
 
 const PORT = process.env.PORT || 3000;
 
@@ -21,6 +26,22 @@ let servidorWS = new sWS.ServidorWS();
 ...
 */
 
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: env.process.GOOGLE_CLIENT_ID,
+      clientSecret: env.process.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://yourdomain:3000/auth/google/callback",
+      passReqToCallback: true,
+    },
+    function (request, accessToken, refreshToken, profile, done) {
+      User.findOrCreate({ googleId: profile.id }, function (err, user) {
+        return done(err, user);
+      });
+    }
+  )
+);
+
 app.use(express.static(__dirname + "/"));
 
 app.get("/", (req, res) => {
@@ -29,6 +50,19 @@ app.get("/", (req, res) => {
   "Content-type", "text/html";
   res.send(`${contenido}`);
 });
+
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["email", "profile"] })
+);
+
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    successRedirect: "/auth/google/success",
+    failureRedirect: "/auth/google/failure",
+  })
+);
 
 app.get("/leerUsuario/:nick", (req, res) => {
   let nick = req.params.nick;
