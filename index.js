@@ -11,14 +11,14 @@ const passport = require("passport");
 
 const modelo = require("./servidor/modelo.js");
 const sWS = require("./servidor/servidorWS.js");
-
-require("dotenv").config();
-const GoogleStrategy = require("passport-google-oauth").Strategy;
+const passportSetup = require("./servidor/passportSetup.js");
 
 const PORT = process.env.PORT || 3000;
 
 let juego = new modelo.Juego(process.argv[2] === "true");
+passportSetup.iniciarAuth();
 let servidorWS = new sWS.ServidorWS();
+const cookieSession = require("cookie-session");
 /*
 "/"
 "/obtenerPartidas"
@@ -26,23 +26,16 @@ let servidorWS = new sWS.ServidorWS();
 ...
 */
 
-passport.use(
-  new GoogleStrategy(
-    {
-      clientID: env.process.GOOGLE_CLIENT_ID,
-      clientSecret: env.process.GOOGLE_CLIENT_SECRET,
-      callbackURL: "http://yourdomain:3000/auth/google/callback",
-      passReqToCallback: true,
-    },
-    function (request, accessToken, refreshToken, profile, done) {
-      User.findOrCreate({ googleId: profile.id }, function (err, user) {
-        return done(err, user);
-      });
-    }
-  )
-);
-
 app.use(express.static(__dirname + "/"));
+
+app.use(
+  cookieSession({
+    name: "Batalla naval",
+    keys: ["key1", "key2"],
+  })
+);
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.get("/", (req, res) => {
   const contenido = fs.readFileSync(__dirname + "/cliente/src/index.html");
@@ -58,11 +51,27 @@ app.get(
 
 app.get(
   "/auth/google/callback",
-  passport.authenticate("google", {
-    successRedirect: "/auth/google/success",
-    failureRedirect: "/auth/google/failure",
-  })
+  passport.authenticate("google", { failureRedirect: "/failure" }),
+  function (req, res) {
+    const nick = req.user;
+    if (nick) {
+      juego.agregarUsuario(nick);
+    }
+    $.cookie("nick", nick);
+
+    res.redirect("/success");
+  }
 );
+
+app.get("/success", (req, res) => {
+  console.log("Exito");
+  res.redirect("/");
+});
+
+app.get("/failure", (req, res) => {
+  console.log("Fallo");
+  res.redirect("/");
+});
 
 app.get("/leerUsuario/:nick", (req, res) => {
   let nick = req.params.nick;

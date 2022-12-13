@@ -20,12 +20,19 @@ file index as "index.js"
 file logica as "modelo.js"
 file servidorWS as "servidorWS.js"
 component datos as "Capa Acceso a Datos"
+file passportFile as "passport-setup-js"
+component passport as "Passport"
 
 index .down.> logica
 index ..> servidorWS
 servidorWS .> logica
 logica .down.> datos
+index .down.> passportFile
+passportFile .down.> passport
 }
+
+component Google
+passport .left.> Google
 
 file Rest
 index .. Rest
