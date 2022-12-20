@@ -13,6 +13,7 @@ function Cad() {
           client.close();
           return;
         }
+        
 
         const dbName = "procesos-si";
 
