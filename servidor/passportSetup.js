@@ -19,7 +19,7 @@ iniciarAuth = function () {
       {
         clientID: env.GOOGLE_CLIENT_ID,
         clientSecret: env.GOOGLE_CLIENT_SECRET,
-        callbackURL: "/auth/google/callback",
+        callbackURL: env.URL + "auth/google/callback",
         passReqToCallback: true,
       },
       function (request, accessToken, refreshToken, profile, done) {
@@ -32,9 +32,7 @@ iniciarAuth = function () {
     )
   );
 
-  console.log("Google cloud ID: " + env.GOOGLE_CLIENT_ID);
-  console.log("Google cloud secret: " + env.GOOGLE_CLIENT_SECRET);
-  console.log("Passport callback: " + passport.callbackURL);
+
 };
 
 module.exports.iniciarAuth = iniciarAuth;
