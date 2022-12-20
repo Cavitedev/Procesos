@@ -57,8 +57,8 @@ app.get(
     if (nick) {
       juego.agregarUsuario(nick);
     }
-    $.cookie("nick", nick);
-
+  
+    res.cookie("nick", nick);
     res.redirect("/success");
   }
 );

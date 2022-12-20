@@ -47,7 +47,7 @@ function Cad() {
   };
 
   function insertar(coleccion, elemento, callback) {
-    coleccion.insertOne(elemento).then((elemento, err) => {
+    coleccion?.insertOne(elemento).then((elemento, err) => {
       if (err) {
         console.log("error");
       } else {
