@@ -53,6 +53,7 @@ app.get(
   "/auth/google/callback",
   passport.authenticate("google", { failureRedirect: "/failure" }),
   function (req, res) {
+    console.log("Authenticate");
     const nick = req.user;
     if (nick) {
       juego.agregarUsuario(nick);

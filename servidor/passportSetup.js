@@ -31,6 +31,10 @@ iniciarAuth = function () {
       }
     )
   );
+
+  console.log("Google cloud ID: " + env.GOOGLE_CLIENT_ID);
+  console.log("Google cloud secret: " + env.GOOGLE_CLIENT_SECRET);
+  console.log("Passport callback: " + passport.callbackURL);
 };
 
 module.exports.iniciarAuth = iniciarAuth;
