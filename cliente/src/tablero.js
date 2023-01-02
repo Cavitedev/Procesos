@@ -174,35 +174,17 @@ function Tablero(size) {
   };
   this.updateCell = function (x, y, type, target) {
     var player = target; //'human-player';
-    // if (targetPlayer === CONST.HUMAN_PLAYER) {
-    // 	player = 'human-player';
-    // } else if (targetPlayer === CONST.COMPUTER_PLAYER) {
-    // 	player = 'computer-player';
-    // } else {
-    // 	// Should never be called
-    // 	console.log("There was an error trying to find the correct player's grid");
-    // }
-
-    // switch (type) {
-    // 	case CONST.CSS_TYPE_EMPTY:
-    // 		this.cells[x][y] = CONST.TYPE_EMPTY;
-    // 		break;
-    // 	case CONST.CSS_TYPE_SHIP:
-    // 		this.cells[x][y] = CONST.TYPE_SHIP;
-    // 		break;
-    // 	case CONST.CSS_TYPE_MISS:
-    // 		this.cells[x][y] = CONST.TYPE_MISS;
-    // 		break;
-    // 	case CONST.CSS_TYPE_HIT:
-    // 		this.cells[x][y] = CONST.TYPE_HIT;
-    // 		break;
-    // 	case CONST.CSS_TYPE_SUNK:
-    // 		this.cells[x][y] = CONST.TYPE_SUNK;
-    // 		break;
-    // 	default:
-    // 		this.cells[x][y] = CONST.TYPE_EMPTY;
-    // 		break;
-    // }
+    if (["agua", "tocado", "hundido"].includes(type)) {
+      if (player === "human-player") {
+        this.actualizarTextoTurno("Te toca a ti");
+      } else if (player === "computer-player") {
+        this.actualizarTextoTurno("Le toca a tu oponente");
+      } else {
+        console.log(
+          "There was an error trying to find the correct player's grid"
+        );
+      }
+    }
     var classes = ["grid-cell", "grid-cell-" + x + "-" + y, "grid-" + type];
     document
       .querySelector("." + player + " .grid-cell-" + x + "-" + y)
@@ -230,12 +212,14 @@ function Tablero(size) {
     this.ini();
   };
 
+  this.actualizarTextoTurno = (texto) => {
+    $("#turno").text(texto);
+  };
+
   this.limpiarGrid = function () {
     this.createGrid();
     this.resumeReplacement();
   };
   this.createGrid();
   this.mostrar(false);
-
-
 }

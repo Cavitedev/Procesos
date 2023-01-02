@@ -10,8 +10,16 @@
       "request": "launch",
       "cwd": "${workspaceRoot}",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "start"],
-      "port": 3000
+      "runtimeArgs": ["run-script", "start"]
+    },
+
+    {
+      "name": "Launch via NPM dev",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceRoot}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start:dev"]
     }
   ]
 }

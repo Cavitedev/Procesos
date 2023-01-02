@@ -163,6 +163,12 @@ function ClienteWS() {
             ? "Es tu turno"
             : "Es el turno del otro jugador")
       );
+
+      tablero.actualizarTextoTurno(
+        datos.turno === $.cookie("nick")
+          ? "Te toca a ti"
+          : "Le toca a tu oponente"
+      );
     });
 
     this.socket.on("actualizarListaPartidas", function (lista) {
@@ -185,14 +191,19 @@ function ClienteWS() {
       console.log(datos);
       if (haSidoDesplegado) {
         iu.mostrarModal("Sus barcos han sido desplegados");
+        tablero.actualizarTextoTurno("Esperando a que despliegue tu rival");
       } else {
         iu.mostrarModal("No se han podido desplegar los barcos");
+        tablero.actualizarTextoTurno("Desplegando");
       }
     });
 
     this.socket.on("resultadoDisparo", function (datos) {
       console.log(datos);
       const datosDisparo = datos.datoDisparo;
+      if (!datosDisparo.haDisparado) {
+        return;
+      }
 
       if (datosDisparo.estado === "hundido") {
         for (const celda of datosDisparo.otrasCeldas) {
@@ -219,6 +230,11 @@ function ClienteWS() {
       if (datosDisparo.ganador) {
         iu.mostrarModal(
           `Ha ganado ${datosDisparo.ganador} tras hundir todos los barcos`
+        );
+        tablero.actualizarTextoTurno(
+          $.cookie("nick") === datosDisparo.ganador
+            ? "Has ganado"
+            : "Has perdido"
         );
       }
     });
