@@ -297,7 +297,7 @@ function Partida(codigo, usuario) {
     //Cambiar tamaño si hace falta
     tablero.crearTablero(10);
 
-    jugador.flota = this.flota;
+    jugador.flota = this.flota.map((barco) => barco.clone());
     jugador.tablero = tablero;
 
     return jugador;
@@ -349,7 +349,7 @@ function Partida(codigo, usuario) {
   this.cambiarFlota = function (flota) {
     this.flota = flota;
     for (jugador of this.jugadores) {
-      jugador.flota = flota;
+      jugador.flota = this.flota.map((barco) => barco.clone());
     }
   };
 
@@ -439,13 +439,28 @@ function Partida(codigo, usuario) {
       haDisparado = true;
     }
 
-    return {
+    let resultadoDisparo = {
       haDisparado: haDisparado,
       x: x,
       y: y,
       estado: estadoDisparo.estado,
       turno: this.jugadorTurnoActual().nick(),
     };
+
+    if (estadoDisparo.estado === "hundido") {
+      const barco = tableroAtacado.celdas[x][y].contiene.barco;
+      console.log(barco);
+      resultadoDisparo.otrasCeldas = [];
+      for (const celda of tableroAtacado.celdasDelBarco(barco)) {
+        console.log(celda);
+        resultadoDisparo.otrasCeldas.push({
+          x: celda.x,
+          y: celda.y,
+        });
+      }
+    }
+
+    return resultadoDisparo;
   };
 
   this.toMap = () => {
@@ -467,6 +482,10 @@ function Barco(tamano) {
 
   this.nombre = () => "b" + this.tamano;
   this.hundido = () => this.vida == 0;
+
+  this.clone = () => {
+    return new Barco(this.tamano);
+  };
 }
 
 function CeldaBarco(barco) {
@@ -636,6 +655,10 @@ function Tablero() {
       celda.contiene = new CeldaBarco(barco);
     }
     return true;
+  };
+
+  this.celdasDelBarco = (barco) => {
+    return this.celdas.flat().filter((c) => c.contieneAlBarco(barco));
   };
 }
 

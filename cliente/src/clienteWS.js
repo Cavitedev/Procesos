@@ -193,14 +193,31 @@ function ClienteWS() {
     this.socket.on("resultadoDisparo", function (datos) {
       console.log(datos);
       const datosDisparo = datos.datoDisparo;
-      tablero.updateCell(
-        datosDisparo.x,
-        datosDisparo.y,
-        datosDisparo.estado,
-        datosDisparo.turno === $.cookie("nick")
-          ? "human-player"
-          : "computer-player"
-      );
+      if(!datosDisparo.haDisparado){
+        return;
+      }
+
+      if (datosDisparo.estado === "hundido") {
+        for (const celda of datosDisparo.otrasCeldas) {
+          tablero.updateCell(
+            celda.x,
+            celda.y,
+            datosDisparo.estado,
+            datosDisparo.turno === $.cookie("nick")
+              ? "human-player"
+              : "computer-player"
+          );
+        }
+      } else {
+        tablero.updateCell(
+          datosDisparo.x,
+          datosDisparo.y,
+          datosDisparo.estado,
+          datosDisparo.turno === $.cookie("nick")
+            ? "human-player"
+            : "computer-player"
+        );
+      }
     });
   };
 }

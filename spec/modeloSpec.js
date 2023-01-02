@@ -206,6 +206,57 @@ describe("El juego", function () {
 
     expect(partida.esJugando()).toEqual(true);
   });
+
+  it("Se crea partida con los barcos en las mismas posiciones, se puede hundir un barco de dos posiciones perfectamente", () => {
+    let partida;
+    let jugador1, jugador2;
+    let tablero1, tablero2;
+
+    const partidaId = usr1.crearPartida();
+    usr2.unirseAPartida(partidaId);
+
+    partida = juego.partidas[partidaId];
+    partida.cambiarFlota([new Barco(1), new Barco(1), new Barco(2)]);
+    const jugadores = partida.jugadores;
+    jugador1 = jugadores[0];
+    tablero1 = jugador1.tablero;
+
+    jugador1.colocarBarco(0, 0, 0);
+    jugador1.colocarBarco(1, 1, 1);
+    jugador1.colocarBarco(2, 2, 2, "horizontal");
+    jugador1.barcosDesplegados();
+
+    jugador2 = jugadores[1];
+    tablero2 = jugador2.tablero;
+    jugador2.colocarBarco(0, 0, 0);
+    jugador2.colocarBarco(1, 1, 1);
+    jugador2.colocarBarco(2, 2, 2, "horizontal");
+    jugador2.barcosDesplegados();
+
+    jugador1.disparar(0, 0);
+    let disparo = jugador2.disparar(0, 0);
+
+    expect(disparo.haDisparado).toEqual(true);
+    expect(disparo.estado).toEqual("hundido");
+    expect(disparo.turno).toEqual(nick1);
+
+
+    jugador1.disparar(1, 1);
+    disparo = jugador2.disparar(1, 1);
+
+    expect(disparo.haDisparado).toEqual(true);
+    expect(disparo.estado).toEqual("hundido");
+    expect(disparo.turno).toEqual(nick1);
+
+    jugador1.disparar(2, 2);
+    disparo = jugador2.disparar(2, 2);
+
+    expect(disparo.haDisparado).toEqual(true);
+    expect(disparo.estado).toEqual("tocado");
+    expect(disparo.turno).toEqual(nick1);
+
+  });
+
   describe("tras crear partida", () => {
     let partida;
     let jugador1, jugador2;
@@ -259,16 +310,30 @@ describe("El juego", function () {
       expect(tablero2.celdas[1][1].estado()).toEqual("hundido");
     });
 
-    it("Jugador no puede golpear dos veces una celda de barco", () => {
-      jugador1.disparar(1, 1);
+    it("Jugador hunde un barco de 2 celdas y envía todas las cordenadas de las celdas a hundir", () => {
+      jugador1.disparar(2, 3);
       jugador2.disparar(1, 1);
-      let disparo = jugador1.disparar(1, 1);
-      expect(disparo.haDisparado).toEqual(false);
-      expect(disparo.estado).toEqual("Este barco ya fue hundido");
-      expect(disparo.turno).toEqual(nick1);
-      expect(partida.turno).toEqual(0);
-      expect(tablero2.celdas[1][1].estado()).toEqual("hundido");
-    });
+      let disparo = jugador1.disparar(3, 3);
+      expect(disparo.haDisparado).toEqual(true);
+      expect(disparo.estado).toEqual("hundido");
+      expect(disparo.turno).toEqual(nick2);
+      expect(disparo.otrasCeldas).toEqual([
+        { x: 2, y: 3 },
+        { x: 3, y: 3 },
+      ]);
+      expect(tablero2.celdas[2][3].estado()).toEqual("hundido");
+      expect(tablero2.celdas[3][3].estado()).toEqual("hundido");
+    }),
+      it("Jugador no puede golpear dos veces una celda de barco", () => {
+        jugador1.disparar(1, 1);
+        jugador2.disparar(1, 1);
+        let disparo = jugador1.disparar(1, 1);
+        expect(disparo.haDisparado).toEqual(false);
+        expect(disparo.estado).toEqual("Este barco ya fue hundido");
+        expect(disparo.turno).toEqual(nick1);
+        expect(partida.turno).toEqual(0);
+        expect(tablero2.celdas[1][1].estado()).toEqual("hundido");
+      });
 
     it("Jugador con turno dispara a un barco de dos celdas y lo hunde", () => {
       let disparo = jugador1.disparar(2, 3);
