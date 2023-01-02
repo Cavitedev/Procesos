@@ -458,6 +458,10 @@ function Partida(codigo, usuario) {
           y: celda.y,
         });
       }
+
+      if (this.fase === faseFinal) {
+        resultadoDisparo.ganador = this.jugadorSinTurnoActual().nick();
+      }
     }
 
     return resultadoDisparo;

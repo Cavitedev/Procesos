@@ -193,9 +193,6 @@ function ClienteWS() {
     this.socket.on("resultadoDisparo", function (datos) {
       console.log(datos);
       const datosDisparo = datos.datoDisparo;
-      if(!datosDisparo.haDisparado){
-        return;
-      }
 
       if (datosDisparo.estado === "hundido") {
         for (const celda of datosDisparo.otrasCeldas) {
@@ -216,6 +213,12 @@ function ClienteWS() {
           datosDisparo.turno === $.cookie("nick")
             ? "human-player"
             : "computer-player"
+        );
+      }
+
+      if (datosDisparo.ganador) {
+        iu.mostrarModal(
+          `Ha ganado ${datosDisparo.ganador} tras hundir todos los barcos`
         );
       }
     });
