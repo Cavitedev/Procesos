@@ -26,9 +26,9 @@ function Juego(test) {
   this.eliminarUsuario = function (nick) {
     let juegosFinalizados = this.finalizarJuegosDe(nick);
 
-    if (juegosFinalizados.some((j) => !j.datosJuego.eliminado)) {
+    if (juegosFinalizados.some((j) => !j.datosJuego.saleDePartida)) {
       console.log(
-        `No se puede eliminar el usuario ${nick} porque tiene partidas en curso`
+        `No se puede eliminar el usuario ${nick} porq ue tiene partidas en curso`
       );
       return false;
     }
@@ -65,6 +65,7 @@ function Juego(test) {
     let partida = this.obtenerPartida(codigo);
     let estabaEnPartida = false;
     let eliminado = false;
+    let saleDePartida = false;
     let usuariosExpulsados = [];
 
     if (!partida) return false;
@@ -76,6 +77,7 @@ function Juego(test) {
       estabaEnPartida = true;
       if (partida.esInicial() || partida.esDesplegando()) {
         // Es imposible con 2 jugadores, pero lo tengo en cuenta aún así
+        saleDePartida = true;
         usuariosExpulsados.push(nick);
         partida.eliminarJugador(nick);
       } else {
@@ -83,8 +85,10 @@ function Juego(test) {
         eliminado = this.eliminarPartida(codigo);
       }
     }
+    saleDePartida = eliminado | saleDePartida;
     return {
       eliminado: eliminado,
+      saleDePartida: saleDePartida,
       estabaEnPartida: estabaEnPartida,
       usuariosExpulsados: usuariosExpulsados,
     };
