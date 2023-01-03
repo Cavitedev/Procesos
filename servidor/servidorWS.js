@@ -1,5 +1,3 @@
-
-
 function ServidorWS() {
   //enviar peticiones
 
@@ -23,7 +21,6 @@ function ServidorWS() {
 
       socket.on("crearPartida", function (nick) {
         let codigoPartida = juego.crearPartidaNick(nick);
-
 
         if (codigoPartida) {
           socket.join(codigoPartida.toString());
@@ -96,11 +93,12 @@ function ServidorWS() {
 
       socket.on("salirPartida", function (nick, codigo) {
         let datosJuego = juego.finalizarJuego(nick, codigo);
-        socket.leave(codigo);
         cli.enviarATodosEnPartida(io, codigo.toString(), "partidaEliminada", {
           haSidoEliminado: datosJuego.eliminado,
           codigo: codigo,
+          usuariosExpulsados: datosJuego.usuariosExpulsados,
         });
+        socket.leave(codigo);
 
         let lista = juego.obtenerPartidasDisponibles();
         cli.enviarATodos(socket, "actualizarListaPartidas", lista);

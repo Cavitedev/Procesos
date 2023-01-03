@@ -64,21 +64,22 @@ function Juego(test) {
   this.finalizarJuego = function (nick, codigo) {
     let partida = this.obtenerPartida(codigo);
     let estabaEnPartida = false;
-    let eliminado;
+    let eliminado = false;
     let usuariosExpulsados = [];
 
     if (!partida) return false;
     if (partida.esOwnerDe(nick)) {
       estabaEnPartida = true;
-      usuariosExpulsados.push(partida.obtenerJugadoresNoPropietaros());
+      usuariosExpulsados.push(...partida.obtenerJugadoresNoPropietaros());
       eliminado = this.eliminarPartida(codigo);
     } else if (partida.esJugadoPor(nick)) {
       estabaEnPartida = true;
-      if (partida.fase == "inicial") {
+      if (partida.esInicial() || partida.esDesplegando()) {
         // Es imposible con 2 jugadores, pero lo tengo en cuenta aún así
-        eliminado = partida.eliminarJugador(nick);
+        usuariosExpulsados.push(nick);
+        partida.eliminarJugador(nick);
       } else {
-        usuariosExpulsados.push(partida.obtenerJugadoresNoPropietaros());
+        usuariosExpulsados.push(...partida.obtenerJugadoresNoPropietaros());
         eliminado = this.eliminarPartida(codigo);
       }
     }
@@ -330,7 +331,7 @@ function Partida(codigo, usuario) {
   };
 
   this.obtenerJugadoresNoPropietaros = function (nick) {
-    return this.jugadores.filter((p) => p.nick() != nick);
+    return this.jugadores.filter((p) => p.nick() != nick).map((j) => j.nick());
   };
 
   this.eliminarJugador = function (nick) {
@@ -393,7 +394,7 @@ function Partida(codigo, usuario) {
   };
 
   this.esJugadoPor = function (nick) {
-    return this.jugadores.some((j) => j.nick === nick);
+    return this.jugadores.some((j) => j.nick() === nick);
   };
 
   this.otroTurno = () => (this.turno + 1) % this.jugadores.length;

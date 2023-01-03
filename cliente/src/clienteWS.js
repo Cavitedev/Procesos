@@ -88,31 +88,29 @@ function ClienteWS() {
       console.log(`El usuario ${data.nick} se ha eliminado`);
       $.removeCookie("nick");
       $.removeCookie("codigoP");
+      cli.codigo = undefined;
       iu.limpiarPantalla();
       iu.mostrarAgregarUsuario();
     });
 
     this.socket.on("partidaEliminada", function (data) {
-      if (!data.haSidoEliminado) {
-        console.log(
-          `La partida ${data.codigo} no pudo ser eliminada cuando se intentó borrar`
-        );
-        return;
-      }
-      cli.codigo = undefined;
-      if (data.usuarioEliminado === $.cookie("nick")) {
-        if ($.cookie("codigoP")) {
-          $.removeCookie("codigoP");
-          iu.limpiarPantalla();
-          iu.mostrarHome();
-        }
-        return;
-      }
-      if ($.cookie("codigoP") === data.codigo.toString()) {
+      if (data.usuariosExpulsados.flat().some((u) => u === $.cookie("nick"))) {
+        cli.codigo = undefined;
         $.removeCookie("codigoP");
         tablero.mostrar(false);
         iu.limpiarPantalla();
         iu.mostrarHome();
+      } else {
+        iu.mostrarModal(
+          `${data.usuariosExpulsados.join(",")} ha abandonado la partida.`
+        );
+        tablero.limpiarGrid();
+      }
+
+      if (data.haSidoEliminado) {
+        iu.mostrarModal(
+          "La partida en la que estabas jugando ha sido eliminada"
+        );
       }
     });
 
