@@ -110,6 +110,7 @@ function ClienteWS() {
       }
       if ($.cookie("codigoP") === data.codigo.toString()) {
         $.removeCookie("codigoP");
+        tablero.mostrar(false);
         iu.limpiarPantalla();
         iu.mostrarHome();
       }
