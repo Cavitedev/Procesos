@@ -104,6 +104,7 @@ function Tablero(size) {
 
       // Don't screw up the direction if the user tries to place again.
       self.colocarBarco(x, y, self.nombreBarco, self.orientacion);
+      self.nombreBarco = undefined;
     }
   };
   this.endPlacing = function (shipType) {
@@ -142,6 +143,7 @@ function Tablero(size) {
     self.placingOnGrid = true;
   };
   this.colocarBarco = function (x, y, nombre, orientacion) {
+    if (!nombre) return;
     //comprobar límites
     console.log("Colocando barco: " + x + "-" + y + " " + nombre);
     idBarco = parseInt(nombre);
