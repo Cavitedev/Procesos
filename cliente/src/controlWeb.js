@@ -158,6 +158,7 @@ function ControlWeb() {
     $(".linea-partida").remove();
 
     for (partida of partidas) {
+      if (partida.owner === $.cookie("nick")) continue;
       var cadena =
         "<li class='linea-partida list-group-item'><span>" +
         "Código: " +
