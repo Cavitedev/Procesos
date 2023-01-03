@@ -99,7 +99,7 @@ function ClienteWS() {
         );
         return;
       }
-
+      cli.codigo = undefined;
       if (data.usuarioEliminado === $.cookie("nick")) {
         if ($.cookie("codigoP")) {
           $.removeCookie("codigoP");
