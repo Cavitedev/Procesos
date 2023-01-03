@@ -94,17 +94,20 @@ function ClienteWS() {
     });
 
     this.socket.on("partidaEliminada", function (data) {
-      if (data.usuariosExpulsados.flat().some((u) => u === $.cookie("nick"))) {
+      if (
+        data.usuariosExpulsados?.flat()?.some((u) => u === $.cookie("nick"))
+      ) {
         cli.codigo = undefined;
         $.removeCookie("codigoP");
-        tablero.mostrar(false);
         iu.limpiarPantalla();
         iu.mostrarHome();
       } else {
-        iu.mostrarModal(
-          `${data.usuariosExpulsados.join(",")} ha abandonado la partida.`
-        );
-        tablero.limpiarGrid();
+        if (data.usuariosExpulsados) {
+          iu.mostrarModal(
+            `${data.usuariosExpulsados.join(",")} ha abandonado la partida.`
+          );
+          tablero.limpiarGrid();
+        }
       }
 
       if (data.haSidoEliminado) {

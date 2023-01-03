@@ -68,7 +68,6 @@ function ServidorWS() {
 
         if (datosEliminacion.juegosFinalizados) {
           for (partidaEliminada of datosEliminacion.juegosFinalizados) {
-            socket.leave(partidaEliminada.codigo);
             cli.enviarATodosEnPartida(
               io,
               partidaEliminada.codigo.toString(),
@@ -76,9 +75,11 @@ function ServidorWS() {
               {
                 haSidoEliminado: partidaEliminada.datosJuego.eliminado,
                 codigo: partidaEliminada.codigo,
-                usuarioEliminado: nick,
+                usuariosExpulsados:
+                  partidaEliminada.datosJuego.usuariosExpulsados,
               }
             );
+            socket.leave(partidaEliminada.codigo);
           }
         }
 

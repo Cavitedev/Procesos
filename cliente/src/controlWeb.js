@@ -198,5 +198,6 @@ function ControlWeb() {
     $("#mHin").remove();
     $("#mAU").remove();
     $("#LP").html("");
+    tablero.mostrar(false);
   };
 }
