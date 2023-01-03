@@ -139,6 +139,7 @@ function ClienteWS() {
       //TODO Mostrar despliegue
       console.log(datos);
       tablero.flota = datos.flota;
+      tablero.limpiarGrid();
       tablero.mostrar(true);
       iu.mostrarModal(
         "¡A colocar barcos!, elige un barco y colócalo en el tablero"
