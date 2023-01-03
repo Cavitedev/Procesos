@@ -104,13 +104,13 @@ function Tablero(size) {
 
       // Don't screw up the direction if the user tries to place again.
       self.colocarBarco(x, y, self.nombreBarco, self.orientacion);
-      self.nombreBarco = undefined;
     }
   };
   this.endPlacing = function (shipType) {
     const shipPlace = document.getElementById(shipType);
     shipPlace.setAttribute("class", "placed");
     shipPlace.placingOnGrid = false;
+    self.nombreBarco = undefined;
   };
 
   this.resumeReplacement = function () {
