@@ -135,6 +135,7 @@ function ControlWeb() {
   };
 
   this.mostrarListaDePartidas = function () {
+    if (!$.cookie("nick")) return;
     this.limpiarListaDePartidas();
     var cadena =
       "<div class='col' id='mLP'>" +
