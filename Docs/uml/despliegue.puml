@@ -1,4 +1,4 @@
-@startuml Test Diagram
+@startuml Despliegue
 !theme mars
 Node Navegador{
     file indexWeb as "index.html"
