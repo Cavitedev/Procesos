@@ -7,6 +7,9 @@ Trabajo introductorio a tecnologías node, socket.io, jquery, bootstrap, etc. Pa
 Esta es una aplicación web genérica que permite:
 
 - Iniciar sesión mediante nick
+- Iniciar sesión mediante Google
 - Crear partidas de 2 usuarios
 - Unirse a estas partidas
-- ya se verá
+- Salirse de estas partidas distinguiendo si es el propietario o quien se unió.
+- Jugar un battleship con barcos que tengan una orientación horizontal o vertical, pero de manera que puedan estar adyacentes a otros barcos.
+
